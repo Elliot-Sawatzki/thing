@@ -2,7 +2,9 @@
     "name": "Thing",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "Timers": "github:microsoft/arcade-timers#v1.1.0",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2"
     },
     "files": [
         "main.blocks",
@@ -16,7 +18,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.12.39",
+        "target": "1.12.41",
         "targetId": "arcade"
     },
     "supportedTargets": [
