@@ -2,6 +2,7 @@ namespace SpriteKind {
     export const Killer = SpriteKind.create()
     export const baby_killer = SpriteKind.create()
     export const Ghost_block = SpriteKind.create()
+    export const Jumpy_thing = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 2
@@ -81,42 +82,45 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             timer.after(749, function () {
                 sprites.destroy(projectile)
             })
-        }
-        if (controller.right.isPressed() || Walking_direction == 1) {
-            projectile = sprites.createProjectileFromSprite(img`
-                f f f f f 
-                f 8 9 9 f 
-                f 8 6 9 f 
-                f 8 8 8 f 
-                f f f f f 
-                `, mySprite, 85, 0)
-            timer.after(749, function () {
-                sprites.destroy(projectile)
-            })
-        }
-        if (controller.up.isPressed() || Walking_direction == 2) {
-            projectile = sprites.createProjectileFromSprite(img`
-                f f f f f 
-                f 8 9 9 f 
-                f 8 6 9 f 
-                f 8 8 8 f 
-                f f f f f 
-                `, mySprite, 0, -85)
-            timer.after(749, function () {
-                sprites.destroy(projectile)
-            })
-        }
-        if (controller.down.isPressed() || Walking_direction == 3) {
-            projectile = sprites.createProjectileFromSprite(img`
-                f f f f f 
-                f 8 9 9 f 
-                f 8 6 9 f 
-                f 8 8 8 f 
-                f f f f f 
-                `, mySprite, 0, 85)
-            timer.after(749, function () {
-                sprites.destroy(projectile)
-            })
+        } else {
+            if (controller.right.isPressed() || Walking_direction == 1) {
+                projectile = sprites.createProjectileFromSprite(img`
+                    f f f f f 
+                    f 8 9 9 f 
+                    f 8 6 9 f 
+                    f 8 8 8 f 
+                    f f f f f 
+                    `, mySprite, 85, 0)
+                timer.after(749, function () {
+                    sprites.destroy(projectile)
+                })
+            } else {
+                if (controller.up.isPressed() || Walking_direction == 2) {
+                    projectile = sprites.createProjectileFromSprite(img`
+                        f f f f f 
+                        f 8 9 9 f 
+                        f 8 6 9 f 
+                        f 8 8 8 f 
+                        f f f f f 
+                        `, mySprite, 0, -85)
+                    timer.after(749, function () {
+                        sprites.destroy(projectile)
+                    })
+                } else {
+                    if (controller.down.isPressed() || Walking_direction == 3) {
+                        projectile = sprites.createProjectileFromSprite(img`
+                            f f f f f 
+                            f 8 9 9 f 
+                            f 8 6 9 f 
+                            f 8 8 8 f 
+                            f f f f f 
+                            `, mySprite, 0, 85)
+                        timer.after(749, function () {
+                            sprites.destroy(projectile)
+                        })
+                    }
+                }
+            }
         }
     })
 })
@@ -210,8 +214,29 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
     timer.after(300, function () {
         baby_killer.setKind(SpriteKind.Enemy)
         baby_killer_2.setKind(SpriteKind.baby_killer)
-        baby_killer.follow(mySprite, 45)
-        baby_killer_2.follow(mySprite, 45)
+        baby_killer_2.follow(mySprite, 20)
+        baby_killer.follow(mySprite, 20)
+        Jump_er = 0
+        Jump_er2 = 0
+        Theplaceholderreturns = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 3 
+            `, SpriteKind.Jumpy_thing)
+        Theplaceholderreturns.setPosition(1000, 1000)
     })
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -222,6 +247,37 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
         tiles.setCurrentTilemap(tilemap`level2`)
         mySprite.setPosition(230, 95)
         Room_ID = 1
+    }
+})
+sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
+    if (Jump_er2 == 0) {
+        baby_killer.follow(mySprite, 90)
+        baby_killer_2.follow(mySprite, 90)
+        timer.after(500, function () {
+            baby_killer.follow(mySprite, 20)
+            baby_killer_2.follow(mySprite, 20)
+            timer.after(500, function () {
+                Theplaceholderreturns = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 3 
+                    `, SpriteKind.Jumpy_thing)
+                Theplaceholderreturns.setPosition(1000, 1000)
+            })
+        })
     }
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -271,6 +327,16 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, o
         })
     })
 })
+sprites.onCreated(SpriteKind.Jumpy_thing, function (sprite) {
+    if (Jump_er == 0) {
+        timer.after(1000, function () {
+            sprites.destroy(Theplaceholderreturns)
+        })
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`transparency16`, function (sprite, location) {
+	
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(baby_killer, effects.confetti, 2000)
     sprites.destroy(projectile)
@@ -316,6 +382,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         })
     })
 })
+let Theplaceholderreturns: Sprite = null
+let Jump_er2 = 0
+let Jump_er = 0
 let baby_killer_2: Sprite = null
 let baby_killer: Sprite = null
 let projectile: Sprite = null
