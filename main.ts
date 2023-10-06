@@ -7,6 +7,9 @@ namespace SpriteKind {
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 2
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (sprite, location) {
+    tiles.setCurrentTilemap(tilemap`level16`)
+})
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile = sprites.createProjectileFromSprite(img`
         f f f f f 
@@ -287,12 +290,6 @@ info.onLifeZero(function () {
     sprites.destroy(mySprite)
     game.gameOver(false)
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorClosedWest, function (sprite, location) {
-    if (Room_ID == 1) {
-        tiles.setCurrentTilemap(tilemap`level12`)
-        Room_ID = 3
-    }
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
         mySprite.x += 10
@@ -334,8 +331,11 @@ sprites.onCreated(SpriteKind.Jumpy_thing, function (sprite) {
         })
     }
 })
-scene.onOverlapTile(SpriteKind.Player, assets.tile`transparency16`, function (sprite, location) {
-	
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenWest, function (sprite, location) {
+    if (Room_ID == 1) {
+        tiles.setCurrentTilemap(tilemap`level12`)
+        Room_ID = 3
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(baby_killer, effects.confetti, 2000)
