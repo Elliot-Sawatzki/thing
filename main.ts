@@ -478,8 +478,8 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
     timer.after(300, function () {
         baby_killer.setVelocity(0, 0)
         baby_killer_2.setVelocity(0, 0)
-        baby_killer_2.follow(mySprite, 20)
-        baby_killer.follow(mySprite, 20)
+        baby_killer_2.follow(mySprite, 0)
+        baby_killer.follow(mySprite, 0)
         Jump_er = 0
         Theplaceholderreturns = sprites.create(img`
             . . . . . . . . . . . . . . . . 
@@ -514,19 +514,19 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
     if (baby_killer.overlapsWith(baby_killer_2)) {
-        baby_killer_2.follow(mySprite, 70)
-        baby_killer.follow(mySprite, 90)
-    } else {
-        baby_killer.follow(mySprite, 90)
         baby_killer_2.follow(mySprite, 90)
+        baby_killer.follow(mySprite, 100)
+    } else {
+        baby_killer.follow(mySprite, 100)
+        baby_killer_2.follow(mySprite, 100)
     }
     timer.after(500, function () {
         if (baby_killer.overlapsWith(baby_killer_2)) {
-            baby_killer.follow(mySprite, 15)
-            baby_killer_2.follow(mySprite, 20)
+            baby_killer.follow(mySprite, 5)
+            baby_killer_2.follow(mySprite, 10)
         } else {
-            baby_killer.follow(mySprite, 20)
-            baby_killer_2.follow(mySprite, 20)
+            baby_killer.follow(mySprite, 10)
+            baby_killer_2.follow(mySprite, 10)
         }
         timer.after(500, function () {
             Theplaceholderreturns = sprites.create(img`
