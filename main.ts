@@ -3,12 +3,112 @@ namespace SpriteKind {
     export const baby_killer = SpriteKind.create()
     export const Ghost_block = SpriteKind.create()
     export const Jumpy_thing = SpriteKind.create()
+    export const Target1 = SpriteKind.create()
+    export const Target2 = SpriteKind.create()
+    export const Target3 = SpriteKind.create()
+    export const Target4 = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 2
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (sprite, location) {
-    tiles.setCurrentTilemap(tilemap`level16`)
+    if (Room_ID == 0) {
+        tiles.setCurrentTilemap(tilemap`level16`)
+        tiles.placeOnRandomTile(mySprite, sprites.dungeon.stairSouth)
+        Room_ID = 4
+        Target1 = sprites.create(img`
+            ....................
+            ..1111111111111111..
+            .111111111111111111.
+            .111ffffffffffff111.
+            .11ffffffffffffff11.
+            .11fff99999999fff11.
+            .11ff9999999999ff11.
+            .11ff9992222999ff11.
+            .11ff9922222299ff11.
+            .11ff9922552299ff11.
+            .11ff9922552299ff11.
+            .11ff9922222299ff11.
+            .11ff9992222999ff11.
+            .11ff9999999999ff11.
+            .11fff99999999fff11.
+            .11ffffffffffffff11.
+            .111ffffffffffff111.
+            .111111111111111111.
+            ..1111111111111111..
+            ....................
+            `, SpriteKind.Target1)
+        Target2 = sprites.create(img`
+            ....................
+            ..1111111111111111..
+            .111111111111111111.
+            .111ffffffffffff111.
+            .11ffffffffffffff11.
+            .11fff99999999fff11.
+            .11ff9999999999ff11.
+            .11ff9992222999ff11.
+            .11ff9922222299ff11.
+            .11ff9922552299ff11.
+            .11ff9922552299ff11.
+            .11ff9922222299ff11.
+            .11ff9992222999ff11.
+            .11ff9999999999ff11.
+            .11fff99999999fff11.
+            .11ffffffffffffff11.
+            .111ffffffffffff111.
+            .111111111111111111.
+            ..1111111111111111..
+            ....................
+            `, SpriteKind.Target2)
+        Target3 = sprites.create(img`
+            ....................
+            ..1111111111111111..
+            .111111111111111111.
+            .111ffffffffffff111.
+            .11ffffffffffffff11.
+            .11fff99999999fff11.
+            .11ff9999999999ff11.
+            .11ff9992222999ff11.
+            .11ff9922222299ff11.
+            .11ff9922552299ff11.
+            .11ff9922552299ff11.
+            .11ff9922222299ff11.
+            .11ff9992222999ff11.
+            .11ff9999999999ff11.
+            .11fff99999999fff11.
+            .11ffffffffffffff11.
+            .111ffffffffffff111.
+            .111111111111111111.
+            ..1111111111111111..
+            ....................
+            `, SpriteKind.Target3)
+        Target4 = sprites.create(img`
+            ....................
+            ..1111111111111111..
+            .111111111111111111.
+            .111ffffffffffff111.
+            .11ffffffffffffff11.
+            .11fff99999999fff11.
+            .11ff9999999999ff11.
+            .11ff9992222999ff11.
+            .11ff9922222299ff11.
+            .11ff9922552299ff11.
+            .11ff9922552299ff11.
+            .11ff9922222299ff11.
+            .11ff9992222999ff11.
+            .11ff9999999999ff11.
+            .11fff99999999fff11.
+            .11ffffffffffffff11.
+            .111ffffffffffff111.
+            .111111111111111111.
+            ..1111111111111111..
+            ....................
+            `, SpriteKind.Target4)
+        tiles.placeOnTile(Target1, tiles.getTileLocation(11, 4))
+        tiles.placeOnTile(Target2, tiles.getTileLocation(4, 11))
+        tiles.placeOnTile(Target3, tiles.getTileLocation(11, 11))
+        tiles.placeOnTile(Target4, tiles.getTileLocation(4, 4))
+    }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile = sprites.createProjectileFromSprite(img`
@@ -71,6 +171,103 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killer, function (sprite, otherSprite) {
     sprites.destroy(projectile)
     statusbar.value += -50
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target1, function (sprite, otherSprite) {
+    sprites.destroy(Target1, effects.disintegrate, 400)
+    Target_room_door_thingy += 1
+    timer.after(200, function () {
+        if (Target_room_door_thingy == Target_room_door_thingy_2) {
+            timer.after(300, function () {
+                Target_room_door_thingy += -1
+                Target1 = sprites.create(img`
+                    ....................
+                    ..1111111111111111..
+                    .111111111111111111.
+                    .111ffffffffffff111.
+                    .11ffffffffffffff11.
+                    .11fff99999999fff11.
+                    .11ff9999999999ff11.
+                    .11ff9992222999ff11.
+                    .11ff9922222299ff11.
+                    .11ff9922552299ff11.
+                    .11ff9922552299ff11.
+                    .11ff9922222299ff11.
+                    .11ff9992222999ff11.
+                    .11ff9999999999ff11.
+                    .11fff99999999fff11.
+                    .11ffffffffffffff11.
+                    .111ffffffffffff111.
+                    .111111111111111111.
+                    ..1111111111111111..
+                    ....................
+                    `, SpriteKind.Target1)
+                tiles.placeOnTile(Target1, tiles.getTileLocation(11, 4))
+                tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
+                tiles.setTileAt(tiles.getTileLocation(8, 0), sprites.dungeon.doorOpenNorth)
+                timer.after(150, function () {
+                    sprites.destroy(Target1)
+                    sprites.destroy(Target2)
+                    sprites.destroy(Target3)
+                    sprites.destroy(Target4)
+                })
+            })
+        } else {
+            timer.after(300, function () {
+                Target_room_door_thingy += -1
+                Target1 = sprites.create(img`
+                    ....................
+                    ..1111111111111111..
+                    .111111111111111111.
+                    .111ffffffffffff111.
+                    .11ffffffffffffff11.
+                    .11fff99999999fff11.
+                    .11ff9999999999ff11.
+                    .11ff9992222999ff11.
+                    .11ff9922222299ff11.
+                    .11ff9922552299ff11.
+                    .11ff9922552299ff11.
+                    .11ff9922222299ff11.
+                    .11ff9992222999ff11.
+                    .11ff9999999999ff11.
+                    .11fff99999999fff11.
+                    .11ffffffffffffff11.
+                    .111ffffffffffff111.
+                    .111111111111111111.
+                    ..1111111111111111..
+                    ....................
+                    `, SpriteKind.Target1)
+                tiles.placeOnTile(Target1, tiles.getTileLocation(11, 4))
+            })
+        }
+    })
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target3, function (sprite, otherSprite) {
+    sprites.destroy(Target3, effects.disintegrate, 400)
+    timer.after(500, function () {
+        Target3 = sprites.create(img`
+            ....................
+            ..1111111111111111..
+            .111111111111111111.
+            .111ffffffffffff111.
+            .11ffffffffffffff11.
+            .11fff99999999fff11.
+            .11ff9999999999ff11.
+            .11ff9992222999ff11.
+            .11ff9922222299ff11.
+            .11ff9922552299ff11.
+            .11ff9922552299ff11.
+            .11ff9922222299ff11.
+            .11ff9992222999ff11.
+            .11ff9999999999ff11.
+            .11fff99999999fff11.
+            .11ffffffffffffff11.
+            .111ffffffffffff111.
+            .111111111111111111.
+            ..1111111111111111..
+            ....................
+            `, SpriteKind.Target3)
+        tiles.placeOnTile(Target3, tiles.getTileLocation(11, 11))
+    })
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     timer.throttle("shooter", 750, function () {
@@ -186,8 +383,68 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (spri
         Room_ID = 1
     }
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, otherSprite) {
+    sprites.destroy(Target4, effects.disintegrate, 400)
+    timer.after(500, function () {
+        Target4 = sprites.create(img`
+            ....................
+            ..1111111111111111..
+            .111111111111111111.
+            .111ffffffffffff111.
+            .11ffffffffffffff11.
+            .11fff99999999fff11.
+            .11ff9999999999ff11.
+            .11ff9992222999ff11.
+            .11ff9922222299ff11.
+            .11ff9922552299ff11.
+            .11ff9922552299ff11.
+            .11ff9922222299ff11.
+            .11ff9992222999ff11.
+            .11ff9999999999ff11.
+            .11fff99999999fff11.
+            .11ffffffffffffff11.
+            .111ffffffffffff111.
+            .111111111111111111.
+            ..1111111111111111..
+            ....................
+            `, SpriteKind.Target4)
+        tiles.placeOnTile(Target4, tiles.getTileLocation(4, 4))
+    })
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, otherSprite) {
+    sprites.destroy(Target2, effects.disintegrate, 400)
+    Target_room_door_thingy_2 += 1
+    timer.after(200, function () {
+        timer.after(300, function () {
+            Target_room_door_thingy_2 += -1
+            Target2 = sprites.create(img`
+                ....................
+                ..1111111111111111..
+                .111111111111111111.
+                .111ffffffffffff111.
+                .11ffffffffffffff11.
+                .11fff99999999fff11.
+                .11ff9999999999ff11.
+                .11ff9992222999ff11.
+                .11ff9922222299ff11.
+                .11ff9922552299ff11.
+                .11ff9922552299ff11.
+                .11ff9922222299ff11.
+                .11ff9992222999ff11.
+                .11ff9999999999ff11.
+                .11fff99999999fff11.
+                .11ffffffffffffff11.
+                .111ffffffffffff111.
+                .111111111111111111.
+                ..1111111111111111..
+                ....................
+                `, SpriteKind.Target2)
+            tiles.placeOnTile(Target2, tiles.getTileLocation(4, 11))
+        })
+    })
+})
 statusbars.onZero(StatusBarKind.Health, function (status) {
-    baby_killer = sprites.createProjectileFromSprite(img`
+    baby_killer = sprites.create(img`
         . . . . . . . . . . . . . 
         . . . . . . . . . . . . . 
         . . . . . . . . . . . . . 
@@ -199,8 +456,8 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
         . . f f f . . f f . f f . 
         . . f . f . . . f . . f . 
         . . f . f . . . f . . f . 
-        `, The_killer, -47, 0)
-    baby_killer_2 = sprites.createProjectileFromSprite(img`
+        `, SpriteKind.Enemy)
+    baby_killer_2 = sprites.create(img`
         . . . . . . . . . . . . . 
         . . . . . . . . . . . . . 
         . . . . . . . . . . . . . 
@@ -212,15 +469,18 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
         . . f f f . . f f . f f . 
         . . f . f . . . f . . f . 
         . . f . f . . . f . . f . 
-        `, The_killer, 47, 0)
+        `, SpriteKind.baby_killer)
+    baby_killer.setPosition(The_killer.x, The_killer.y)
+    baby_killer_2.setPosition(The_killer.x, The_killer.y)
     sprites.destroy(The_killer)
+    baby_killer.setVelocity(50, 0)
+    baby_killer_2.setVelocity(-50, 0)
     timer.after(300, function () {
-        baby_killer.setKind(SpriteKind.Enemy)
-        baby_killer_2.setKind(SpriteKind.baby_killer)
+        baby_killer.setVelocity(0, 0)
+        baby_killer_2.setVelocity(0, 0)
         baby_killer_2.follow(mySprite, 20)
         baby_killer.follow(mySprite, 20)
         Jump_er = 0
-        Jump_er2 = 0
         Theplaceholderreturns = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -253,35 +513,43 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
     }
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
-    if (Jump_er2 == 0) {
+    if (baby_killer.overlapsWith(baby_killer_2)) {
+        baby_killer_2.follow(mySprite, 70)
+        baby_killer.follow(mySprite, 90)
+    } else {
         baby_killer.follow(mySprite, 90)
         baby_killer_2.follow(mySprite, 90)
-        timer.after(500, function () {
+    }
+    timer.after(500, function () {
+        if (baby_killer.overlapsWith(baby_killer_2)) {
+            baby_killer.follow(mySprite, 15)
+            baby_killer_2.follow(mySprite, 20)
+        } else {
             baby_killer.follow(mySprite, 20)
             baby_killer_2.follow(mySprite, 20)
-            timer.after(500, function () {
-                Theplaceholderreturns = sprites.create(img`
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 3 
-                    `, SpriteKind.Jumpy_thing)
-                Theplaceholderreturns.setPosition(1000, 1000)
-            })
+        }
+        timer.after(500, function () {
+            Theplaceholderreturns = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 3 
+                `, SpriteKind.Jumpy_thing)
+            Theplaceholderreturns.setPosition(1000, 1000)
         })
-    }
+    })
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 3
@@ -341,11 +609,13 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     sprites.destroy(baby_killer, effects.confetti, 2000)
     sprites.destroy(projectile)
     tiles.setWallAt(tiles.getTileLocation(0, 7), false)
+    tiles.setWallAt(tiles.getTileLocation(7, 0), false)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.baby_killer, function (sprite, otherSprite) {
     sprites.destroy(baby_killer_2, effects.confetti, 2000)
     sprites.destroy(projectile)
     tiles.setWallAt(tiles.getTileLocation(0, 8), false)
+    tiles.setWallAt(tiles.getTileLocation(8, 0), false)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
@@ -383,11 +653,16 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     })
 })
 let Theplaceholderreturns: Sprite = null
-let Jump_er2 = 0
 let Jump_er = 0
 let baby_killer_2: Sprite = null
 let baby_killer: Sprite = null
+let Target_room_door_thingy_2 = 0
+let Target_room_door_thingy = 0
 let projectile: Sprite = null
+let Target4: Sprite = null
+let Target3: Sprite = null
+let Target2: Sprite = null
+let Target1: Sprite = null
 let Walking_direction = 0
 let statusbar: StatusBarSprite = null
 let The_killer: Sprite = null

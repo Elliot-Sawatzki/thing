@@ -283,7 +283,7 @@ namespace myTiles {
 . . . . . 2 2 . . 2 2 . . . . . 
 `, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.greenInnerSouthWest,sprites.dungeon.greenInnerNorthEast,sprites.dungeon.greenInnerNorthWest,sprites.dungeon.greenInnerSouthEast,sprites.dungeon.greenOuterNorth0,sprites.dungeon.greenOuterSouth1,sprites.dungeon.greenOuterSouthEast,sprites.dungeon.greenOuterWest0,sprites.dungeon.greenOuterNorthWest,sprites.dungeon.greenOuterNorthEast,sprites.dungeon.greenOuterSouthWest,sprites.dungeon.greenOuterEast0,sprites.dungeon.stairSouth,sprites.dungeon.doorClosedNorth], TileScale.Sixteen);
             case "level2":
-            case "level2":return tiles.createTilemap(hex`10001200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000404070404040707040407040407040409020102010201020102010203020108090102030201020102010201020102080505060505060505050506050505060500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`, img`
+            case "level2":return tiles.createTilemap(hex`1000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040407040404070704040704040704040902010201020102010201020302010809010203020102010201020102010208050506050506050505050605050506050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000`, img`
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
@@ -302,7 +302,7 @@ namespace myTiles {
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
-`, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.floorDarkDiamond,sprites.dungeon.floorDark5,sprites.dungeon.greenOuterNorth0,sprites.dungeon.greenOuterSouth1,sprites.dungeon.greenOuterSouth0,sprites.dungeon.greenOuterNorth1,sprites.dungeon.stairWest,sprites.dungeon.doorOpenWest], TileScale.Sixteen);
+`, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.floorDarkDiamond,sprites.dungeon.floorDark5,sprites.dungeon.greenOuterNorth0,sprites.dungeon.greenOuterSouth1,sprites.dungeon.greenOuterSouth0,sprites.dungeon.greenOuterNorth1,sprites.dungeon.stairWest,sprites.dungeon.doorOpenWest,sprites.dungeon.doorOpenNorth], TileScale.Sixteen);
         }
         return null;
     })
