@@ -7,6 +7,7 @@ namespace SpriteKind {
     export const Target2 = SpriteKind.create()
     export const Target3 = SpriteKind.create()
     export const Target4 = SpriteKind.create()
+    export const Something = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 2
@@ -18,7 +19,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (spr
         mySprite.setPosition(125, 230)
         if (Target_life == 0) {
             tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
-            tiles.setTileAt(tiles.getTileLocation(8, 0), sprites.dungeon.doorOpenNorth)
         } else {
             Target1 = sprites.create(img`
                 ....................
@@ -207,7 +207,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target1, function (sprite, o
                     `, SpriteKind.Target1)
                 tiles.placeOnTile(Target1, tiles.getTileLocation(11, 4))
                 tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
-                tiles.setTileAt(tiles.getTileLocation(8, 0), sprites.dungeon.doorOpenNorth)
                 timer.after(150, function () {
                     sprites.destroy(Target1)
                     sprites.destroy(Target2)
@@ -568,6 +567,12 @@ info.onLifeZero(function () {
     sprites.destroy(mySprite)
     game.gameOver(false)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    game.showLongText("Can I get a cheese burger?", DialogLayout.Bottom)
+    game.showLongText("Cheese burger? Sure!", DialogLayout.Bottom)
+    info.changeLifeBy(5)
+    sprites.destroy(Health_nonstatus)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
         mySprite.x += 10
@@ -614,11 +619,51 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenWest, function (s
         tiles.setCurrentTilemap(tilemap`level12`)
         mySprite.setPosition(165, 95)
         Room_ID = 3
+        Health_nonstatus = sprites.create(img`
+            ...........ccccc66666...........
+            ........ccc4444444444666........
+            ......cc444444444bb4444466......
+            .....cb4444bb4444b5b444444b.....
+            ....eb4444b5b44444b44444444b....
+            ...ebb44444b4444444444b444446...
+            ..eb6bb444444444bb444b5b444446..
+            ..e6bb5b44444444b5b444b44bb44e..
+            .e66b4b4444444444b4444444b5b44e.
+            .e6bb444444444444444444444bb44e.
+            eb66b44444bb444444444444444444be
+            eb66bb444b5b44444444bb44444444be
+            fb666b444bb444444444b5b4444444bf
+            fcb666b44444444444444bb444444bcf
+            .fbb6666b44444444444444444444bf.
+            .efbb66666bb4444444444444444bfe.
+            .86fcbb66666bbb44444444444bcc688
+            8772effcbbbbbbbbbbbbbbbbcfc22778
+            87722222cccccccccccccccc22226678
+            f866622222222222222222222276686f
+            fef866677766667777776667777fffef
+            fbff877768f86777777666776fffffbf
+            fbeffeefffeff7766688effeeeefeb6f
+            f6bfffeffeeeeeeeeeeeeefeeeeebb6e
+            f66ddfffffeeeffeffeeeeeffeedb46e
+            .c66ddd4effffffeeeeeffff4ddb46e.
+            .fc6b4dddddddddddddddddddb444ee.
+            ..ff6bb444444444444444444444ee..
+            ....ffbbbb4444444444444444ee....
+            ......ffebbbbbb44444444eee......
+            .........fffffffcccccee.........
+            ................................
+            `, SpriteKind.Food)
+        Health_nonstatus.setPosition(128, 110)
     }
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
     if (Room_ID == 4) {
-    	
+        if (Worthiness == 1) {
+            tiles.setCurrentTilemap(tilemap`level18`)
+        } else {
+            mySprite.y += 15
+            game.showLongText("Not yet", DialogLayout.Bottom)
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -685,6 +730,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         })
     })
 })
+let Health_nonstatus: Sprite = null
 let Theplaceholderreturns: Sprite = null
 let Jump_er = 0
 let baby_killer_2: Sprite = null
@@ -702,6 +748,8 @@ let The_killer: Sprite = null
 let mySprite: Sprite = null
 let Room_ID = 0
 let Target_life = 0
+let Worthiness = 0
+Worthiness = 0
 Target_life = 1
 Room_ID = 0
 tiles.setCurrentTilemap(tilemap`level1`)
@@ -732,6 +780,7 @@ mySprite.setStayInScreen(true)
 mySprite.setPosition(158, 115)
 controller.moveSprite(mySprite, 60, 60)
 scene.cameraFollowSprite(mySprite)
+game.showLongText("Press z to shoot, or spacebar, and if you cant seem to beat a level, just press x a lot till I code it to be a powerup that can only be used every 10 seconds or so", DialogLayout.Bottom)
 timer.after(4000, function () {
     The_killer = sprites.create(img`
         . . . . . . . . . . . . . . . . 
