@@ -23,6 +23,7 @@ namespace SpriteKind {
     export const Heart_2 = SpriteKind.create()
     export const Heart_3 = SpriteKind.create()
     export const Heart_4 = SpriteKind.create()
+    export const Boss_Type_1 = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const Scorhealth = StatusBarKind.create()
@@ -36,6 +37,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Scattergog, function (sprite, ot
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.tf2, function (sprite, otherSprite) {
     timer.throttle("Scouch", 400, function () {
+        sprites.destroy(sprite)
         Scot_tf2_heatl.value += -10
     })
 })
@@ -331,7 +333,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killer, function (sprite, otherSprite) {
-    sprites.destroy(projectile)
+    sprites.destroy(sprite)
     statusbar.value += -50
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target1, function (sprite, otherSprite) {
@@ -488,7 +490,7 @@ statusbars.onZero(StatusBarKind.Scorhealth, function (status) {
         ....................
         ....................
         ....................
-        `, SpriteKind.Heart_2)
+        `, SpriteKind.Heart_1)
     Heart_3 = sprites.create(img`
         ....................
         ....................
@@ -510,7 +512,7 @@ statusbars.onZero(StatusBarKind.Scorhealth, function (status) {
         ....................
         ....................
         ....................
-        `, SpriteKind.Heart_3)
+        `, SpriteKind.Heart_1)
     Heart_4 = sprites.create(img`
         ....................
         ....................
@@ -532,7 +534,7 @@ statusbars.onZero(StatusBarKind.Scorhealth, function (status) {
         ....................
         ....................
         ....................
-        `, SpriteKind.Heart_4)
+        `, SpriteKind.Heart_1)
     Heart_1.setPosition(60, 140)
     Heart_2.setPosition(200, 140)
     Heart_3.setPosition(134, 200)
@@ -664,10 +666,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherS
         })
     })
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_3, function (sprite, otherSprite) {
-    sprites.destroy(Heart_3)
-    info.changeLifeBy(1)
-})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 0
 })
@@ -718,6 +716,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, o
     })
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, otherSprite) {
+    tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
     sprites.destroy(Target2, effects.disintegrate, 400)
     Target_room_door_thingy_2 += 1
     timer.after(200, function () {
@@ -846,7 +845,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_1, function (sprite, otherSprite) {
-    sprites.destroy(Heart_1)
+    sprites.destroy(otherSprite)
     info.changeLifeBy(1)
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
@@ -1073,19 +1072,11 @@ info.onLifeZero(function () {
     sprites.destroy(mySprite)
     game.gameOver(false)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_4, function (sprite, otherSprite) {
-    sprites.destroy(Heart_4)
-    info.changeLifeBy(1)
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    game.showLongText("Chess", DialogLayout.Bottom)
-    game.showLongText("Bruger", DialogLayout.Bottom)
+    game.showLongText("Eatin a burger with no honey mustard", DialogLayout.Bottom)
     info.changeLifeBy(5)
     sprites.destroy(NewBurg)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_2, function (sprite, otherSprite) {
-    sprites.destroy(Heart_2)
-    info.changeLifeBy(1)
+    Worthiness = 1
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
@@ -1211,9 +1202,8 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenWest, function (s
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.THing_2, function (sprite, otherSprite) {
-    timer.throttle("Healerouch", 500, function () {
-        info.changeLifeBy(-1)
-    })
+    info.changeLifeBy(-1)
+    sprites.destroy(otherSprite)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.TACO, function (sprite, otherSprite) {
     timer.throttle("score tf2", 2000, function () {
@@ -1247,6 +1237,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.TACO, function (sprite, otherSpr
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
                     `, SpriteKind.Tf2_thing)
+                Whowouldhaveguessed.setPosition(100, 100000)
             })
         })
     })
@@ -1255,9 +1246,77 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
     if (Room_ID == 4) {
         if (Worthiness == 1) {
             tiles.setCurrentTilemap(tilemap`level18`)
+            Lava_man_IIV = sprites.create(img`
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                `, SpriteKind.Boss_Type_1)
+            mySprite.setPosition(40, 180)
+            Lava_man_IIV.setPosition(40, 80)
         } else {
             mySprite.y += 15
-            game.showLongText("Not yet", DialogLayout.Bottom)
+            game.showLongText("Thou hast not partaken in a a hamburger yet", DialogLayout.Bottom)
             Room_ID = 4
         }
     }
@@ -1459,14 +1518,14 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(baby_killer, effects.confetti, 2000)
-    sprites.destroy(projectile)
+    sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 7), false)
     tiles.setWallAt(tiles.getTileLocation(7, 0), false)
     tiles.setWallAt(tiles.getTileLocation(7, 15), false)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.baby_killer, function (sprite, otherSprite) {
     sprites.destroy(baby_killer_2, effects.confetti, 2000)
-    sprites.destroy(projectile)
+    sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 8), false)
     tiles.setWallAt(tiles.getTileLocation(8, 0), false)
     tiles.setWallAt(tiles.getTileLocation(8, 15), false)
@@ -1639,6 +1698,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         })
     })
 })
+let Lava_man_IIV: Sprite = null
 let NewBurg: Sprite = null
 let Whowouldhaveguessed: Sprite = null
 let projectile2: Sprite = null
@@ -1681,7 +1741,7 @@ Worthiness = 0
 Target_life = 1
 Room_ID = 0
 tiles.setCurrentTilemap(tilemap`level1`)
-info.setLife(13)
+info.setLife(10000000000000000)
 mySprite = sprites.create(img`
     ....................
     ....................
@@ -1721,6 +1781,7 @@ timer.after(500, function () {
             timer.after(2500, function () {
                 textSprite.setText("And last of all")
                 textSprite2.setText("HE IS HERE")
+                game.showLongText("I also gave you around a few million health to make it easier ", DialogLayout.Bottom)
                 timer.after(4000, function () {
                     sprites.destroy(textSprite)
                     sprites.destroy(textSprite2)
