@@ -24,6 +24,8 @@ namespace SpriteKind {
     export const Heart_3 = SpriteKind.create()
     export const Heart_4 = SpriteKind.create()
     export const Boss_Type_1 = SpriteKind.create()
+    export const Left_side = SpriteKind.create()
+    export const Right_side = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const Scorhealth = StatusBarKind.create()
@@ -644,7 +646,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherS
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `)
+        mySprite.setVelocity(The_killer.vx * 2, The_killer.vy * 2)
         timer.after(300, function () {
+            mySprite.setVelocity(0, 0)
             The_killer.setImage(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . f f f f . 
@@ -665,6 +669,12 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherS
                 `)
         })
     })
+})
+controller.down.onEvent(ControllerButtonEvent.Released, function () {
+    Walking_direction = 5
+})
+sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Left_side, function (sprite, otherSprite) {
+    sprite.setVelocity(40, 0)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 0
@@ -715,6 +725,12 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, o
         tiles.placeOnTile(Target4, tiles.getTileLocation(4, 4))
     })
 })
+controller.right.onEvent(ControllerButtonEvent.Released, function () {
+    Walking_direction = 5
+})
+controller.left.onEvent(ControllerButtonEvent.Released, function () {
+    Walking_direction = 5
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, otherSprite) {
     sprites.destroy(Target2, effects.disintegrate, 400)
     Target_room_door_thingy_2 += 1
@@ -744,8 +760,12 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, o
                 ....................
                 `, SpriteKind.Target2)
             tiles.placeOnTile(Target2, tiles.getTileLocation(4, 11))
+            tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
         })
     })
+})
+sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Right_side, function (sprite, otherSprite) {
+    sprite.setVelocity(-40, 0)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Secret_food, function (sprite, otherSprite) {
     game.showLongText("Cheese Burger", DialogLayout.Bottom)
@@ -846,6 +866,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_1, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
     info.changeLifeBy(1)
+})
+controller.up.onEvent(ControllerButtonEvent.Released, function () {
+    Walking_direction = 5
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
     if (baby_killer.overlapsWith(baby_killer_2)) {
@@ -1094,6 +1117,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, o
             f . f . . . . . . . . . f . f 
             . f f . . . . . . . . . f f . 
             `)
+        mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
         timer.after(300, function () {
             baby_killer_2.setImage(img`
                 . . . . . . . . . . . . . 
@@ -1108,6 +1132,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, o
                 . . f . f . . . f . . f . 
                 . . f . f . . . f . . f . 
                 `)
+            mySprite.setVelocity(0, 0)
         })
     })
 })
@@ -1243,7 +1268,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.TACO, function (sprite, otherSpr
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
     if (Room_ID == 4) {
-        if (Worthiness == 1) {
+        if (Worthiness == 0) {
             tiles.setCurrentTilemap(tilemap`level18`)
             Lava_man_IIV = sprites.create(img`
                 fffffffffffffffffffffffffffffffffffffffffffff
@@ -1298,6 +1323,45 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
             game.showLongText("This cube you see before you is the master of this dungeon, he has been the one behind everything you have faced while inside it. There are two ways this could go down; Either you die, or he dies. But beware, he is no normal foe, he is an ancient force of destruction, able to harness a power beyond that of any warrior alive, or dead.", DialogLayout.Bottom)
             game.showLongText("And the bossfight is still pending", DialogLayout.Bottom)
             scene.cameraFollowSprite(mySprite)
+            Placeholder_bossfight = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . 4 . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Left_side)
+            Placeholder_bossfight.setPosition(1, 100)
+            Lava_man_IIV.setVelocity(40, 0)
+            Other_placeholder_bossfight = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . 4 . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Right_side)
+            Other_placeholder_bossfight.setPosition(320, 100)
         } else {
             mySprite.y += 15
             game.showLongText("Thou hast not partaken in a a hamburger yet", DialogLayout.Bottom)
@@ -1664,7 +1728,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
             f . f . . . . . . . . . f . f 
             . f f . . . . . . . . . f f . 
             `)
+        mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
         timer.after(300, function () {
+            mySprite.setVelocity(0, 0)
             baby_killer.setImage(img`
                 . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . 
@@ -1678,10 +1744,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
                 . . f . f . . . f . . f . 
                 . . f . f . . . f . . f . 
                 `)
-            info.changeLifeBy(randint(-1, -1))
         })
     })
 })
+let Other_placeholder_bossfight: Sprite = null
+let Placeholder_bossfight: Sprite = null
 let Lava_man_IIV: Sprite = null
 let NewBurg: Sprite = null
 let Whowouldhaveguessed: Sprite = null
@@ -1724,7 +1791,7 @@ burg = 0
 Worthiness = 0
 Target_life = 1
 Room_ID = 0
-info.setLife(500)
+info.setLife(3)
 tiles.setCurrentTilemap(tilemap`level1`)
 mySprite = sprites.create(img`
     ....................
@@ -1766,7 +1833,6 @@ timer.after(500, function () {
                 textSprite.setText("And last of all")
                 textSprite2.setText("HE IS HERE")
                 timer.after(4000, function () {
-                    game.showLongText("You also have extra health to make it easier ", DialogLayout.Bottom)
                     sprites.destroy(textSprite)
                     sprites.destroy(textSprite2)
                     The_killer = sprites.create(img`
