@@ -26,6 +26,9 @@ namespace SpriteKind {
     export const Boss_Type_1 = SpriteKind.create()
     export const Left_side = SpriteKind.create()
     export const Right_side = SpriteKind.create()
+    export const THingamadoodle = SpriteKind.create()
+    export const ROCK = SpriteKind.create()
+    export const Floor_spike = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const Scorhealth = StatusBarKind.create()
@@ -42,6 +45,33 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.tf2, function (sprite, other
         sprites.destroy(sprite)
         Scot_tf2_heatl.value += -10
     })
+})
+sprites.onCreated(SpriteKind.THingamadoodle, function (sprite) {
+    if (Boss_fire_true == 1) {
+        projectile3 = sprites.createProjectileFromSprite(img`
+            . 8 8 8 8 8 8 . 
+            8 8 6 6 6 6 8 8 
+            8 6 9 9 9 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 1 1 9 6 8 
+            8 6 9 9 9 9 6 8 
+            . 8 6 6 6 6 8 . 
+            . . 8 8 8 8 . . 
+            `, Lava_man_VII, 0, 70)
+        projectile3.y += 35
+        projectile3.changeScale(1.25, ScaleAnchor.Middle)
+        timer.after(200, function () {
+            sprites.destroy(Boss_fire_real)
+        })
+    }
 })
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 2
@@ -183,6 +213,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenSouth, function (
             sprites.destroy(Target4)
         }
     }
+})
+scene.onHitWall(SpriteKind.ROCK, function (sprite, location) {
+    sprites.destroy(sprite)
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Have_scatter == 1) {
@@ -625,6 +658,9 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     })
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.hazardLava0, function (sprite, location) {
+    mySprite.y += 10
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
         info.changeLifeBy(randint(-1, -1))
@@ -670,11 +706,88 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherS
         })
     })
 })
-controller.down.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
-})
 sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Left_side, function (sprite, otherSprite) {
     sprite.setVelocity(40, 0)
+    Boss_fire_true = 0
+    Lava_man_VII.setImage(img`
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        `)
+    Lava_man_VII.y = 100
+    Boss_attack_type = 0
+    if (Math.percentChance(100)) {
+        for (let index = 0; index < randint(3, 5); index++) {
+            Spike = sprites.create(img`
+                ....................
+                ....................
+                ...fffff....fffff...
+                ..fffffff..fffffff..
+                ..fffdfff..fffdfff..
+                ..ffdddff..ffdddff..
+                ..fffffff..fffffff..
+                ..fffffff..fffffff..
+                ...fffff....fffff...
+                ....................
+                ....................
+                ...fffff....fffff...
+                ..fffffff..fffffff..
+                ..fffdfff..fffdfff..
+                ..ffdddff..ffdddff..
+                ..fffffff..fffffff..
+                ..fffffff..fffffff..
+                ...fffff....fffff...
+                ....................
+                ....................
+                `, SpriteKind.Floor_spike)
+            tiles.placeOnRandomTile(Spike, sprites.dungeon.floorDark0)
+            timer.after(10000, function () {
+                sprites.destroyAllSpritesOfKind(SpriteKind.Floor_spike, effects.disintegrate, 500)
+            })
+        }
+    }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 0
@@ -725,12 +838,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, o
         tiles.placeOnTile(Target4, tiles.getTileLocation(4, 4))
     })
 })
-controller.right.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
-})
-controller.left.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
-})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, otherSprite) {
     sprites.destroy(Target2, effects.disintegrate, 400)
     Target_room_door_thingy_2 += 1
@@ -760,12 +867,384 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, o
                 ....................
                 `, SpriteKind.Target2)
             tiles.placeOnTile(Target2, tiles.getTileLocation(4, 11))
-            tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
         })
     })
 })
 sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Right_side, function (sprite, otherSprite) {
+    Boss_attack_type = 0
     sprite.setVelocity(-40, 0)
+    if (Math.percentChance(40)) {
+        Boss_attack_type = 1
+        animation.runImageAnimation(
+        Lava_man_VII,
+        [img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffcccccccfffffffffffffffffff
+            ffffffffffffffffffcccccccccffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffffcccccccccffffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffffcccccccccccccccfffffffffffffff
+            ffffffffffffffcccccccccccccccccffffffffffffff
+            ffffffffffffffcccccaaaaaaacccccffffffffffffff
+            fffffffffffffcccccaaaaaaaaacccccfffffffffffff
+            fffffffffffffccccaaaaaaaaaaaccccfffffffffffff
+            fffffffffffffccccaaaaaaaaaaaccccfffffffffffff
+            fffffffffffffccccaaaaaaaaaaaccccfffffffffffff
+            fffffffffffffccccaaaaaaaaaaaccccfffffffffffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            fffffffffffffffcccccccccccccccfffffffffffffff
+            ffffffffffffffcccccccccccccccccffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            ffffffffffffccccccaaaaaaaaaccccccffffffffffff
+            fffffffffffcccccaaaaaaaaaaaaacccccfffffffffff
+            ffffffffffcccccaaaaaaaaaaaaaaacccccffffffffff
+            ffffffffffccccaaaaaaaaaaaaaaaaaccccffffffffff
+            fffffffffcccccaaaaa8888888aaaaacccccfffffffff
+            fffffffffccccaaaaa888888888aaaaaccccfffffffff
+            fffffffffccccaaaa88888888888aaaaccccfffffffff
+            fffffffffccccaaaa88888888888aaaaccccfffffffff
+            fffffffffccccaaaa88888888888aaaaccccfffffffff
+            fffffffffccccaaaa88888888888aaaaccccfffffffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            ffffffffffffffcccccccccccccccccffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccaaaaaaaaaaacccccccffffffffff
+            fffffffffccccccaaaaaaaaaaaaaaaccccccfffffffff
+            ffffffffccccccaaaaaaaaaaaaaaaaaccccccffffffff
+            ffffffffcccccaaaaaaaaaaaaaaaaaaacccccffffffff
+            fffffffcccccaaaaaa888888888aaaaaacccccfffffff
+            ffffffcccccaaaaa8888888888888aaaaacccccffffff
+            ffffffccccaaaaa888888888888888aaaaaccccffffff
+            ffffffccccaaaa88888888888888888aaaaccccffffff
+            fffffccccaaaaa88888666666688888aaaaaccccfffff
+            fffffccccaaaa8888866666666688888aaaaccccfffff
+            fffffccccaaaa8888666666666668888aaaaccccfffff
+            fffffccccaaaa8888666666666668888aaaaccccfffff
+            fffffccccaaaa8888666666666668888aaaaccccfffff
+            fffffccccaaaa8888666666666668888aaaaccccfffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccccccccccccccccccccffffffffff
+            fffffffffccccccccaaaaaaaaaaaccccccccfffffffff
+            fffffffcccccccaaaaaaaaaaaaaaaaacccccccfffffff
+            ffffffcccccccaaaaaaaaaaaaaaaaaaacccccccffffff
+            ffffffcccccaaaaaaaaaaaaaaaaaaaaaaacccccffffff
+            fffffcccccaaaaaaa88888888888aaaaaaacccccfffff
+            ffffcccccaaaaaa888888888888888aaaaaacccccffff
+            fffcccccaaaaaa88888888888888888aaaaaacccccfff
+            fffcccccaaaaa8888888888888888888aaaaacccccfff
+            ffcccccaaaaa888888666666666888888aaaaacccccff
+            ffccccaaaaa88888666666666666688888aaaaaccccff
+            ffccccaaaa8888866666666666666688888aaaaccccff
+            fcccccaaaa8888666666666666666668888aaaacccccf
+            fccccaaaa888886666699999996666688888aaaaccccf
+            fccccaaaa888866666999999999666668888aaaaccccf
+            fccccaaaa888866669999999999966668888aaaaccccf
+            fccccaaaa888866669999999999966668888aaaaccccf
+            fccccaaaa888866669999999999966668888aaaaccccf
+            fccccaaaa888866669999999999966668888aaaaccccf
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            fffffffffcccccccaaaaaaaaaaaaacccccccfffffffff
+            ffffffffcccccaaaaaaaaaaaaaaaaaaacccccffffffff
+            fffffffccccaaaaaaaaaaaaaaaaaaaaaaaccccfffffff
+            ffffffccccaaaaaaaaaaaaaaaaaaaaaaaaaccccffffff
+            fffffccccaaaaaaaa88888888888aaaaaaaaccccfffff
+            ffffcccaaaaaaa88888888888888888aaaaaaacccffff
+            fffcccaaaaaaa8888888888888888888aaaaaaacccfff
+            ffccccaaaaa88888888888888888888888aaaaaccccff
+            ffcccaaaaa8888888666666666668888888aaaaacccff
+            fcccaaaaa888888666666666666666888888aaaaacccf
+            fccaaaaa88888866666666666666666888888aaaaaccf
+            cccaaaaa88888666666666666666666688888aaaaaccc
+            ccaaaaa8888866666699999999966666688888aaaaacc
+            ccaaaa888886666699999999999996666688888aaaacc
+            ccaaaa888866666999999999999999666668888aaaacc
+            caaaaa888866669999999999999999966668888aaaaac
+            caaaa88886666699999111111199999666668888aaaac
+            caaaa88886666999991111111119999966668888aaaac
+            caaaa88886666999911111111111999966668888aaaac
+            caaaa88886666999911111111111999966668888aaaac
+            caaaa88886666999911111111111999966668888aaaac
+            caaaa88886666999911111111111999966668888aaaac
+            `],
+        200,
+        false
+        )
+        timer.after(1200, function () {
+            if (Boss_first_fire == 0) {
+                Boss_first_fire += 1
+                Boss_fire_true = 1
+                Boss_fire_real = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . 4 . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.THingamadoodle)
+            } else {
+                Boss_fire_true = 1
+                Boss_fire_real = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . 4 . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.THingamadoodle)
+            }
+        })
+    } else {
+        if (Math.percentChance(60) || Boss_attack_type != 1) {
+            Boss_attack_type = 2
+            timer.after(2500, function () {
+                Lava_man_VII.setVelocity(0, 0)
+                Lava_man_VII.ay += -30
+                timer.after(500, function () {
+                    Lava_man_VII.ay += 300
+                    timer.after(900, function () {
+                        scene.cameraShake(15, 500)
+                        Lava_man_VII.ay = 0
+                        Lava_man_VII.setVelocity(0, -50)
+                        for (let index = 0; index < 20; index++) {
+                            FALLING_ROCK = sprites.create(img`
+                                . . . . . . . . . b b b b . . . 
+                                . . . . . . b b b d d d d b . . 
+                                . . . . . . b d d d d d d b . . 
+                                . . . . b b d d d d d b b d . . 
+                                . . . . b d d d d d d b b d b . 
+                                . . . . c d d d d d b b d b c . 
+                                . . . b c c b b b b d d b c c . 
+                                . . b b c c c b d d b c c c c . 
+                                . b b d d d b b b b b b c c c c 
+                                . c d d d d d d b d b c c c b c 
+                                . c b d d d b b d b c c c b b c 
+                                c b c c c c b d d b b b b b c c 
+                                c c b b b d d b c c b b b b c c 
+                                c c c c c c c c c b b b b c c . 
+                                . c c c c b b b b b b b c c . . 
+                                . . . . c c c c c c c c . . . . 
+                                `, SpriteKind.ROCK)
+                            FALLING_ROCK.changeScale(randint(-0.5, 0.5), ScaleAnchor.Middle)
+                            tiles.placeOnRandomTile(FALLING_ROCK, sprites.castle.rock1)
+                            FALLING_ROCK.ax = randint(-10, 10)
+                            FALLING_ROCK.ay = randint(25, 45)
+                        }
+                        timer.after(1700, function () {
+                            Lava_man_VII.setVelocity(-40, 0)
+                        })
+                    })
+                })
+            })
+        }
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Secret_food, function (sprite, otherSprite) {
     game.showLongText("Cheese Burger", DialogLayout.Bottom)
@@ -866,9 +1345,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_1, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
     info.changeLifeBy(1)
-})
-controller.up.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
     if (baby_killer.overlapsWith(baby_killer_2)) {
@@ -1100,6 +1576,56 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     sprites.destroy(NewBurg)
     Worthiness = 1
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Floor_spike, function (sprite, otherSprite) {
+    timer.throttle("Youch", 1500, function () {
+        otherSprite.setImage(img`
+            .....d........d.....
+            ....ddd......ddd....
+            ...fdddf....fdddf...
+            ..ffdddff..ffdddff..
+            ..ffdddff..ffdddff..
+            ..ffdddff..ffdddff..
+            ..fffffff..fffffff..
+            ..fffffff..fffffff..
+            ...fffff....fffff...
+            .....d........d.....
+            ....ddd......ddd....
+            ...fdddf....fdddf...
+            ..ffdddff..ffdddff..
+            ..ffdddff..ffdddff..
+            ..ffdddff..ffdddff..
+            ..fffffff..fffffff..
+            ..fffffff..fffffff..
+            ...fffff....fffff...
+            ....................
+            ....................
+            `)
+        timer.after(350, function () {
+            otherSprite.setImage(img`
+                ....................
+                ....................
+                ...fffff....fffff...
+                ..fffffff..fffffff..
+                ..fffdfff..fffdfff..
+                ..ffdddff..ffdddff..
+                ..fffffff..fffffff..
+                ..fffffff..fffffff..
+                ...fffff....fffff...
+                ....................
+                ....................
+                ...fffff....fffff...
+                ..fffffff..fffffff..
+                ..fffdfff..fffdfff..
+                ..ffdddff..ffdddff..
+                ..fffffff..fffffff..
+                ..fffffff..fffffff..
+                ...fffff....fffff...
+                ....................
+                ....................
+                `)
+        })
+    })
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
         mySprite.x += 10
@@ -1221,9 +1747,32 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenWest, function (s
                 .........fffffffcccccee.........
                 ................................
                 `, SpriteKind.Secret_food)
+            Health_nonstatus.startEffect(effects.coolRadial)
             Health_nonstatus.setPosition(128, 110)
+            tiles.setWallAt(tiles.getTileLocation(11, 5), true)
+            tiles.setWallAt(tiles.getTileLocation(11, 6), true)
         }
     }
+})
+sprites.onDestroyed(SpriteKind.THingamadoodle, function (sprite) {
+    Boss_fire_real = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . 4 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.THingamadoodle)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.THing_2, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
@@ -1268,9 +1817,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.TACO, function (sprite, otherSpr
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
     if (Room_ID == 4) {
-        if (Worthiness == 0) {
+        if (Worthiness == 1) {
             tiles.setCurrentTilemap(tilemap`level18`)
-            Lava_man_IIV = sprites.create(img`
+            Lava_man_VII = sprites.create(img`
                 fffffffffffffffffffffffffffffffffffffffffffff
                 fffffffffffffffffffffffffffffffffffffffffffff
                 fffffffffffffffffffffffffffffffffffffffffffff
@@ -1317,9 +1866,10 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
                 fffffffffffffffffffffffffffffffffffffffffffff
                 fffffffffffffffffffffffffffffffffffffffffffff
                 `, SpriteKind.Boss_Type_1)
+            projectile.setFlag(SpriteFlag.GhostThroughWalls, true)
             mySprite.setPosition(100, 180)
-            Lava_man_IIV.setPosition(100, 100)
-            scene.cameraFollowSprite(Lava_man_IIV)
+            Lava_man_VII.setPosition(100, 100)
+            scene.cameraFollowSprite(Lava_man_VII)
             game.showLongText("This cube you see before you is the master of this dungeon, he has been the one behind everything you have faced while inside it. There are two ways this could go down; Either you die, or he dies. But beware, he is no normal foe, he is an ancient force of destruction, able to harness a power beyond that of any warrior alive, or dead.", DialogLayout.Bottom)
             game.showLongText("And the bossfight is still pending", DialogLayout.Bottom)
             scene.cameraFollowSprite(mySprite)
@@ -1342,7 +1892,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
                 . . . . . . . . . . . . . . . . 
                 `, SpriteKind.Left_side)
             Placeholder_bossfight.setPosition(1, 100)
-            Lava_man_IIV.setVelocity(40, 0)
+            Lava_man_VII.setVelocity(40, 0)
             Other_placeholder_bossfight = sprites.create(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -1361,7 +1911,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, SpriteKind.Right_side)
-            Other_placeholder_bossfight.setPosition(320, 100)
+            Other_placeholder_bossfight.setPosition(310, 100)
         } else {
             mySprite.y += 15
             game.showLongText("Thou hast not partaken in a a hamburger yet", DialogLayout.Bottom)
@@ -1747,9 +2297,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         })
     })
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.ROCK, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite, effects.disintegrate, 100)
+})
 let Other_placeholder_bossfight: Sprite = null
 let Placeholder_bossfight: Sprite = null
-let Lava_man_IIV: Sprite = null
 let NewBurg: Sprite = null
 let Whowouldhaveguessed: Sprite = null
 let projectile2: Sprite = null
@@ -1758,6 +2310,10 @@ let Jump_er = 0
 let baby_killer_2: Sprite = null
 let baby_killer: Sprite = null
 let Health_nonstatus: Sprite = null
+let FALLING_ROCK: Sprite = null
+let Boss_first_fire = 0
+let Spike: Sprite = null
+let Boss_attack_type = 0
 let Heart_4: Sprite = null
 let Heart_3: Sprite = null
 let Heart_2: Sprite = null
@@ -1772,6 +2328,10 @@ let Target2: Sprite = null
 let Target1: Sprite = null
 let Thing: Sprite = null
 let Walking_direction = 0
+let Boss_fire_real: Sprite = null
+let Lava_man_VII: Sprite = null
+let projectile3: Sprite = null
+let Boss_fire_true = 0
 let Scot_tf2_heatl: StatusBarSprite = null
 let Scatteredgug: Sprite = null
 let statusbar: StatusBarSprite = null
