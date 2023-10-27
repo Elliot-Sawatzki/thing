@@ -26,6 +26,10 @@ namespace SpriteKind {
     export const Boss_Type_1 = SpriteKind.create()
     export const Left_side = SpriteKind.create()
     export const Right_side = SpriteKind.create()
+    export const Boss_shooter_working = SpriteKind.create()
+    export const Boss_projectile = SpriteKind.create()
+    export const Puter = SpriteKind.create()
+    export const Quick_time_food = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const Scorhealth = StatusBarKind.create()
@@ -53,11 +57,15 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (spr
         tiles.setWallAt(tiles.getTileLocation(7, 0), false)
         tiles.setWallAt(tiles.getTileLocation(0, 8), false)
         tiles.setWallAt(tiles.getTileLocation(8, 0), false)
-        tiles.setWallAt(tiles.getTileLocation(7, 15), false)
-        tiles.setWallAt(tiles.getTileLocation(8, 15), false)
         Item_2 += -1
         Room_ID = 0
         mySprite.setPosition(134, 220)
+        if (puzzle_solved == 1) {
+            tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+            tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+            tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+            tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+        }
         if (Item_2 == 0) {
             sprites.destroy(Thing)
         }
@@ -166,16 +174,151 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (spr
     }
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenSouth, function (sprite, location) {
+    if (Room_ID == 0) {
+        Item_2 += 1
+        mySprite.setPosition(134, 40)
+        Room_ID = 5
+        tiles.setCurrentTilemap(tilemap`level19`)
+        if (Item_2 == 1) {
+            Thing = sprites.create(img`
+                ..................................bbbbbb........................................
+                .............................bbbbbb.....b.......................................
+                ............................b..........bb.......................................
+                ...........................b.ffffffffff.bb......................................
+                ..........................b.ffffffffffff..b.....................................
+                ..........................b.ffffffffffffff.b....................................
+                ..........................bfffffffffffffff.bb...................................
+                ...........................fffffffffffffffffb...................................
+                ..........................fffffdddddddddffffb...................................
+                ..........................dddddfffddffffdfffb...................................
+                .......................ddddddddddddddddddd..b...................................
+                .......................d4ddddd1661dd1661dd.dddd.................................
+                .......................d4ddddd1661dd1661dd.dddddddd.............................
+                .......................dd4ddddddddfddddddffff4dddddddddd111.....................
+                ........................ddddddddddfdfddddfff44...ddddddd111b111.................
+                .........................ddddddddfddfddddfff44....dddddd11bb111b................
+                ..........................dddddddfffdddddfff44...ddddddd11b111bb11..............
+                ...........................d4d11dddd11fd.........ddddddd11b11bb111b1............
+                ...........................dd4ff1111ffb..2..........dddd1bb11b111bb1d...........
+                .....................22222bddd4dfffff4bb222222.............1bb11bb1dddd.........
+                ..................22222222bdddd44dd44dbb222222222222222......111b1dddddd........
+                ................222222222bddddddd44ddbb2222222222222222ddddd....b1dddddddd......
+                .............222222222222b2ddddddddddb22222222222222222ddddddd....ddddddddd.....
+                ............2222222222222b2222ddddddbb22222222222222222dddddddddd..ddddddddd....
+                ...........222222222222222b222222222b222222222222222222ddddddddddddddddddddd....
+                ............222222222222222b2222222bb222222222222222222ddddddddddddddddddddd....
+                ...........dd222222222222222b222222b2222222222222222222.dddddddddddddddddddd....
+                ...........ddd222222222222222b2222bb222222222222222.......ddddddddddddddddd.....
+                ...........dddd2222222222222bbb33332222222222222222.............ddddddd.........
+                ...........dddddd22222222222bbbb333222222222222222..............................
+                ....e......dddddd2222222222bbbbb33322222222222222...............................
+                ..........ddddddd22222222222bbb33332222222222222................................
+                ..........ddddddd22222222222222233222222222222..................................
+                .........dddddddd22222222222222222222222222222..................................
+                .........ddddddd222222222222222222222222222222..................................
+                ........ddddddd2222222222222222222222222222222..................................
+                ........ddddddd2222222222222222222222222222222..................................
+                .......ddddddd.2222222222222222222222222222222..................................
+                .......dddddd..2222222222222222222222222222222..................................
+                .......dddddd..2222222222222222222222222222222..................................
+                .......ddddd...2222222222222222222222222222222..................................
+                ......dddddd...2222222222222222222222222222222..................................
+                ......dddddd...22222222222222222222222222222222.................................
+                ......dddddd...22222222222222222222222222222222.................................
+                .....ddddddd...22222222222222222222222222222222.................................
+                .....ddddddd..222222222222222222222222222222222.................................
+                .....ddddddd..222222222222222222222222222222222.................................
+                .....ddddddd..222222222222222222222222222222222.................................
+                .....dddddd..2222222222222222222222222222222222.................................
+                .....ddddd....222222222222222222222222222222222.................................
+                .....1111d.....ff22222222222222222222222222222..................................
+                .....bbb11.....fffff22222222222222222222222fff..................................
+                ....1111bbb....eeffffffbbbbbbbbbbbbbffffffffff..................................
+                ....bbb111b....eeeeffffbbbbbbbbbbbbbfffffffeee..................................
+                ....111bbb11...eeeeeeefbbbbbbbbbbbbbfffeeeeeeee.................................
+                ...1b1111dbbb.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.................................
+                ...11bbbbdd...eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee................................
+                ...ddddddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...............................
+                ...dddddddd...eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee..............................
+                ...dddddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.............................
+                ...dddddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.............................
+                .....dddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee............................
+                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee............................
+                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee............................
+                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...........................
+                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...........................
+                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...........................
+                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee..........................
+                ............eeeeeeeeeeeeeee.......eeeeeeeeeeeeeeeeeeeee.........................
+                ............eeeeeeeeeeeeeee............eeeeeeeeeeeeeeee.........................
+                ............eeeeeeeeeeeee..............eeeeeeeeeeeeeeeee........................
+                ............eeeeeeeeeeeee..............eeeeeeeeeeeeeeeee........................
+                ............eeeeeeeeeeeee...............eeeeeeeeeeeeeeeee.......................
+                ............eeeeeeeeeeee.................eeeeeeeeeeeeeeee.......................
+                ............eeeeeeeeeeee..................eeeeeeeeeeeeeeee......................
+                ............eeeeeeeeeeee...................eeeeeeeeeeeeeee......................
+                ............eeeeeeeeeeee...................eeeeeeeeeeeeeeee.....................
+                ............eeeeeeeeeeee....................eeeeeeeeeeeeeee.....................
+                ............eeeeeeeeeeee....................eeeeeeeeeeeeeee.....................
+                ...........eeeeeeeeeeeeee...................eeeeeeeeeeeeeee.....................
+                ...........eeeeeeeeeeeee....................eeeeeeeeeeeeeeee....................
+                ...........eeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
+                ...........eeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
+                ..........eeeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
+                ..........eeeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
+                ..........eeeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeee.....................eeeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
+                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
+                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
+                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
+                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeee....................
+                ...........eeeeeeeeeeeeeeeee..................eeeeeeeeeeeeeee...................
+                ...........eeeeeeeeeeeeeeee....................eeeeeeeeeeeee....................
+                ...............1111111111........................1111111111.....................
+                ...............1111111111........................1111111111.....................
+                ...............1111111111........................1111111111.....................
+                ...............1111111111........................1111111111.....................
+                ...............111111111..........................111111111.....................
+                ...............111111111..........................111111111.....................
+                ...............111111111..........................1111111111....................
+                ...............111111111..........................1111111111....................
+                ...............111111111...........................111111111....................
+                ...............111111111...........................111111111....................
+                ...............111111111............................11111111....................
+                ...............111111111............................11111111....................
+                ...............ffff1111f............................11111111....................
+                ..............ffffffffff............................1ffffff1....................
+                ............fff11ffffffff..........................fffffff1ff...................
+                .........fff1fff11fffffff..........................ffffff11f11ffff..............
+                .......fffff11fff1fffffff..........................ffffff1ff1fffff..............
+                ........fffff11ffffffffff..........................ffffffffffffffff.............
+                `, SpriteKind.TACO)
+            Thing.setPosition(134, 140)
+        }
+    }
     if (Room_ID == 4) {
         mySprite.setPosition(134, 35)
         tiles.setCurrentTilemap(tilemap`level1`)
         tiles.setWallAt(tiles.getTileLocation(0, 7), false)
-        tiles.setWallAt(tiles.getTileLocation(8, 15), false)
-        tiles.setWallAt(tiles.getTileLocation(7, 15), false)
         tiles.setWallAt(tiles.getTileLocation(8, 0), false)
         tiles.setWallAt(tiles.getTileLocation(7, 0), false)
         tiles.setWallAt(tiles.getTileLocation(0, 8), false)
         Room_ID = 0
+        if (puzzle_solved == 1) {
+            tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+            tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+            tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+            tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+        }
         if (Target_room_door_thingy == 0) {
             sprites.destroy(Target1)
             sprites.destroy(Target2)
@@ -183,6 +326,66 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenSouth, function (
             sprites.destroy(Target4)
         }
     }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Puter, function (sprite, otherSprite) {
+    timer.throttle("Solving", 15000, function () {
+        game.splash("Welcome to the riddle door.", "Your riddle is:")
+        Puzzle_answer = game.askForNumber("How many fingers does a man with 9 fingers have?")
+        timer.after(500, function () {
+            if (Puzzle_answer == 9) {
+                if (Hard_mode_true == 1) {
+                    game.splash("its hard mode, so answer another")
+                    Puzzle_answer = game.askForNumber("Type in 4")
+                    timer.after(500, function () {
+                        if (Puzzle_answer == 4) {
+                            puzzle_solved = 1
+                            tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+                            tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+                            tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+                            tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+                            game.splash("Good job")
+                            sprites.destroy(otherSprite, effects.fountain, 500)
+                        } else {
+                            game.splash("Really?")
+                            sprites.destroy(otherSprite, effects.fountain, 500)
+                            timer.after(5000, function () {
+                                sprites.destroy(mySprite)
+                            })
+                        }
+                    })
+                } else {
+                    puzzle_solved = 1
+                    tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+                    tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+                    tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+                    tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+                    game.splash("Good job")
+                    sprites.destroy(otherSprite, effects.fountain, 500)
+                }
+            } else {
+                if (Puzzle_answer == 777777) {
+                    game.splash("OH BOY BIG LOTTERY SLOT MACHINE BIG WIN        MAJOR WIN BIG CASH YOU'RE WINNER HUGE CASH           $99.95 WOOHOO HUGE DOLLAR WIN BIG CASH")
+                    game.setGameOverEffect(true, effects.starField)
+                    game.gameOver(true)
+                } else {
+                    game.splash("just stop playing this game. In what world does a 9 fingered man have " + Puzzle_answer + " fingers?", " LEAVE THE GAME! LEAVE THE GAME! LEAVE THE GAME! LEAVE THE GAME! LEAVE THE GAME!")
+                    game.splash("As I said, stop playing", "this game")
+                    game.splash("But fine, go ahead anyway.")
+                    sprites.destroy(otherSprite, effects.fountain, 500)
+                    tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+                    tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+                    tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+                    tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+                    timer.after(25000, function () {
+                        game.splash("Hey Hey", "Remember that riddle?")
+                        game.splash("Get pranked", "You failed the riddle")
+                        game.setGameOverEffect(false, effects.dissolve)
+                        game.gameOver(false)
+                    })
+                }
+            }
+        })
+    })
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Have_scatter == 1) {
@@ -670,9 +873,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherS
         })
     })
 })
-controller.down.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
-})
 sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Left_side, function (sprite, otherSprite) {
     sprite.setVelocity(40, 0)
 })
@@ -687,9 +887,13 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (spri
         tiles.setWallAt(tiles.getTileLocation(7, 0), false)
         tiles.setWallAt(tiles.getTileLocation(0, 8), false)
         tiles.setWallAt(tiles.getTileLocation(8, 0), false)
-        tiles.setWallAt(tiles.getTileLocation(7, 15), false)
-        tiles.setWallAt(tiles.getTileLocation(8, 15), false)
         Room_ID = 0
+        if (puzzle_solved == 1) {
+            tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+            tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+            tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+            tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+        }
     }
     if (Room_ID == 3) {
         tiles.setCurrentTilemap(tilemap`level2`)
@@ -725,12 +929,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, o
         tiles.placeOnTile(Target4, tiles.getTileLocation(4, 4))
     })
 })
-controller.right.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
-})
-controller.left.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
-})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, otherSprite) {
     sprites.destroy(Target2, effects.disintegrate, 400)
     Target_room_door_thingy_2 += 1
@@ -765,7 +963,455 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, o
     })
 })
 sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Right_side, function (sprite, otherSprite) {
-    sprite.setVelocity(-40, 0)
+    if (Math.percentChance(100)) {
+        sprite.setVelocity(-40, 0)
+        animation.runImageAnimation(
+        sprite,
+        [img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffffffcccccffffffffffffffffffff
+            fffffffffffffffffffcccccccfffffffffffffffffff
+            fffffffffffffffffffcccccccfffffffffffffffffff
+            fffffffffffffffffffcccccccfffffffffffffffffff
+            fffffffffffffffffffcccccccfffffffffffffffffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffffcccccccccffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffffcccccccccccccccfffffffffffffff
+            ffffffffffffffccccccbbbbbccccccffffffffffffff
+            ffffffffffffffcccccbbbbbbbcccccffffffffffffff
+            ffffffffffffffcccccbbbbbbbcccccffffffffffffff
+            ffffffffffffffcccccbbbbbbbcccccffffffffffffff
+            ffffffffffffffcccccbbbbbbbcccccffffffffffffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            ffffffffffffffcccccccccccccccccffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            ffffffffffffcccccccccccccccccccccffffffffffff
+            ffffffffffffccccccbbbbbbbbbccccccffffffffffff
+            fffffffffffccccccbbbbbbbbbbbccccccfffffffffff
+            ffffffffffccccccbbbbbbbbbbbbbccccccffffffffff
+            ffffffffffcccccbbbbbbbbbbbbbbbcccccffffffffff
+            ffffffffffccccbbbbbbaaaaabbbbbbccccffffffffff
+            ffffffffffccccbbbbbaaaaaaabbbbbccccffffffffff
+            ffffffffffccccbbbbbaaaaaaabbbbbccccffffffffff
+            ffffffffffccccbbbbbaaaaaaabbbbbccccffffffffff
+            ffffffffffccccbbbbbaaaaaaabbbbbccccffffffffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            ffffffffffffffcccccccccccccccccffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccbbbbbbbbbbbcccccccffffffffff
+            fffffffffcccccccbbbbbbbbbbbbbcccccccfffffffff
+            ffffffffccccccbbbbbbbbbbbbbbbbbccccccffffffff
+            ffffffffcccccbbbbbbbbbbbbbbbbbbbcccccffffffff
+            fffffffcccccbbbbbbbbbbbbbbbbbbbbbcccccfffffff
+            ffffffccccccbbbbbbaaaaaaaaabbbbbbccccccffffff
+            ffffffcccccbbbbbbaaaaaaaaaaabbbbbbcccccffffff
+            ffffffccccbbbbbbaaaaaaaaaaaaabbbbbbccccffffff
+            fffffcccccbbbbbaaaaaaaaaaaaaaabbbbbcccccfffff
+            fffffcccccbbbbaaaaaa88888aaaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffcccccccccccfffffffffffffffff
+            ffffffffffffffcccccccccccccccccffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccbbbbbbbbbbbcccccccffffffffff
+            fffffffffcccccccbbbbbbbbbbbbbcccccccfffffffff
+            ffffffffccccccbbbbbbbbbbbbbbbbbccccccffffffff
+            ffffffffcccccbbbbbbbbbbbbbbbbbbbcccccffffffff
+            fffffffcccccbbbbbbbbbbbbbbbbbbbbbcccccfffffff
+            ffffffccccccbbbbbbaaaaaaaaabbbbbbccccccffffff
+            ffffffcccccbbbbbbaaaaaaaaaaabbbbbbcccccffffff
+            ffffffccccbbbbbbaaaaaaaaaaaaabbbbbbccccffffff
+            fffffcccccbbbbbaaaaaaaaaaaaaaabbbbbcccccfffff
+            fffffcccccbbbbaaaaaa88888aaaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            fffffcccccbbbbaaaaa8888888aaaaabbbbcccccfffff
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccccccccccccccccccccffffffffff
+            fffffffffccccccccbbbbbbbbbbbccccccccfffffffff
+            fffffffcccccccbbbbbbbbbbbbbbbbbcccccccfffffff
+            ffffffcccccccbbbbbbbbbbbbbbbbbbbcccccccffffff
+            ffffffcccccbbbbbbbbbbbbbbbbbbbbbbbcccccffffff
+            fffffcccccbbbbbbbaaaaaaaaaaabbbbbbbcccccfffff
+            ffffcccccbbbbbbbaaaaaaaaaaaaabbbbbbbcccccffff
+            fffcccccbbbbbbaaaaaaaaaaaaaaaaabbbbbbcccccfff
+            fffcccccbbbbbaaaaaaaaaaaaaaaaaaabbbbbcccccfff
+            ffcccccbbbbbaaaaaaaaaaaaaaaaaaaaabbbbbcccccff
+            ffccccbbbbbbaaaaaa888888888aaaaaabbbbbbccccff
+            ffccccbbbbbaaaaaa88888888888aaaaaabbbbbccccff
+            fcccccbbbbaaaaaa8888888888888aaaaaabbbbcccccf
+            fccccbbbbbaaaaa888888888888888aaaaabbbbbccccf
+            fccccbbbbbaaaa88888866666888888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccccccccccccccccccccffffffffff
+            fffffffffccccccccbbbbbbbbbbbccccccccfffffffff
+            fffffffcccccccbbbbbbbbbbbbbbbbbcccccccfffffff
+            ffffffcccccccbbbbbbbbbbbbbbbbbbbcccccccffffff
+            ffffffcccccbbbbbbbbbbbbbbbbbbbbbbbcccccffffff
+            fffffcccccbbbbbbbaaaaaaaaaaabbbbbbbcccccfffff
+            ffffcccccbbbbbbbaaaaaaaaaaaaabbbbbbbcccccffff
+            fffcccccbbbbbbaaaaaaaaaaaaaaaaabbbbbbcccccfff
+            fffcccccbbbbbaaaaaaaaaaaaaaaaaaabbbbbcccccfff
+            ffcccccbbbbbaaaaaaaaaaaaaaaaaaaaabbbbbcccccff
+            ffccccbbbbbbaaaaaa888888888aaaaaabbbbbbccccff
+            ffccccbbbbbaaaaaa88888888888aaaaaabbbbbccccff
+            fcccccbbbbaaaaaa8888888888888aaaaaabbbbcccccf
+            fccccbbbbbaaaaa888888888888888aaaaabbbbbccccf
+            fccccbbbbbaaaa88888866666888888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            ffffffffffffffffcccccccccccccffffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            ffffffffffcccccccccccccccccccccccccffffffffff
+            fffffffffccccccccbbbbbbbbbbbccccccccfffffffff
+            fffffffcccccccbbbbbbbbbbbbbbbbbcccccccfffffff
+            ffffffcccccccbbbbbbbbbbbbbbbbbbbcccccccffffff
+            ffffffcccccbbbbbbbbbbbbbbbbbbbbbbbcccccffffff
+            fffffcccccbbbbbbbaaaaaaaaaaabbbbbbbcccccfffff
+            ffffcccccbbbbbbbaaaaaaaaaaaaabbbbbbbcccccffff
+            fffcccccbbbbbbaaaaaaaaaaaaaaaaabbbbbbcccccfff
+            fffcccccbbbbbaaaaaaaaaaaaaaaaaaabbbbbcccccfff
+            ffcccccbbbbbaaaaaaaaaaaaaaaaaaaaabbbbbcccccff
+            ffccccbbbbbbaaaaaa888888888aaaaaabbbbbbccccff
+            ffccccbbbbbaaaaaa88888888888aaaaaabbbbbccccff
+            fcccccbbbbaaaaaa8888888888888aaaaaabbbbcccccf
+            fccccbbbbbaaaaa888888888888888aaaaabbbbbccccf
+            fccccbbbbbaaaa88888866666888888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            fccccbbbbbaaaa88888666666688888aaaabbbbbccccf
+            `,img`
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffffffffffffffffffffffffffffffff
+            fffffffffffffffcccccccccccccccfffffffffffffff
+            fffffffffffffcccccccccccccccccccfffffffffffff
+            fffffffffffcccccccccccccccccccccccfffffffffff
+            fffffffffcccccccbbbbbbbbbbbbbcccccccfffffffff
+            fffffffccccccbbbbbbbbbbbbbbbbbbbccccccfffffff
+            ffffffcccccbbbbbbbbbbbbbbbbbbbbbbbcccccffffff
+            fffffcccccbbbbbbbbbbbbbbbbbbbbbbbbbcccccfffff
+            ffffcccccbbbbbbbbaaaaaaaaaaabbbbbbbbcccccffff
+            fffccccbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbccccfff
+            ffccccbbbbbbbaaaaaaaaaaaaaaaaaaabbbbbbbccccff
+            ffccccbbbbbaaaaaaaaaaaaaaaaaaaaaaabbbbbccccff
+            fccccbbbbbaaaaaaa88888888888aaaaaaabbbbbccccf
+            fcccbbbbbaaaaaaa8888888888888aaaaaaabbbbbcccf
+            cccbbbbbaaaaaa88888888888888888aaaaaabbbbbccc
+            cccbbbbbaaaaa8888888888888888888aaaaabbbbbccc
+            ccbbbbbaaaaa888888888888888888888aaaaabbbbbcc
+            ccbbbbaaaaaa888888666666666888888aaaaaabbbbcc
+            ccbbbbaaaaa88888866666666666888888aaaaabbbbcc
+            cbbbbbaaaa8888886666666666666888888aaaabbbbbc
+            cbbbbaaaaa8888866666666666666688888aaaaabbbbc
+            cbbbbaaaaa8888666666ddddd6666668888aaaaabbbbc
+            cbbbbaaaaa888866666ddddddd666668888aaaaabbbbc
+            cbbbbaaaaa888866666ddddddd666668888aaaaabbbbc
+            cbbbbaaaaa888866666ddddddd666668888aaaaabbbbc
+            cbbbbaaaaa888866666ddddddd666668888aaaaabbbbc
+            `],
+        120,
+        false
+        )
+        timer.after(1200, function () {
+            if (Boss_first_fire == 1) {
+                boss_fire_true += 1
+                Thingy = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . 4 . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.Boss_shooter_working)
+                Boss_first_fire += 1
+            } else {
+                boss_fire_true += 1
+            }
+        })
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Secret_food, function (sprite, otherSprite) {
     game.showLongText("Cheese Burger", DialogLayout.Bottom)
@@ -795,6 +1441,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Secret_food, function (sprite, o
     })
 })
 statusbars.onZero(StatusBarKind.Health, function (status) {
+    killer_alive = 0
     baby_killer = sprites.create(img`
         . . . . . . . . . . . . . 
         . . . . . . . . . . . . . 
@@ -865,10 +1512,15 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_1, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
-    info.changeLifeBy(1)
+    if (Hard_mode_true == 0) {
+        info.changeLifeBy(1)
+    }
 })
-controller.up.onEvent(ControllerButtonEvent.Released, function () {
-    Walking_direction = 5
+controller.combos.attachCombo("UUDDLRLRBA", function () {
+    game.splash("You know what? you don't get more life like in contra, welcome to hard mode ")
+    info.setLife(1)
+    controller.combos.detachCombo("UUDDLRLRBA")
+    Hard_mode_true = 1
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
     if (baby_killer.overlapsWith(baby_killer_2)) {
@@ -946,6 +1598,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, 0, -90)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -965,6 +1620,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, -90, 0)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -984,6 +1642,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, 0, 90)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -1003,6 +1664,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, 90, 0)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             timer.after(500, function () {
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -1023,6 +1687,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, -90, -90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -1042,6 +1709,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, -90, 90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -1061,6 +1731,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, 90, 90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -1080,6 +1753,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, 90, -90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 timer.after(1500, function () {
                     sprites.destroy(Whowouldhaveguessed)
                 })
@@ -1090,15 +1766,44 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 3
 })
+controller.combos.attachCombo("LUBDAL", function () {
+    Quick_time_event = 1
+})
 info.onLifeZero(function () {
     sprites.destroy(mySprite)
     game.gameOver(false)
 })
+sprites.onCreated(SpriteKind.Boss_shooter_working, function (sprite) {
+    projectile3 = sprites.createProjectileFromSprite(img`
+        . . . . . 8 8 8 8 8 8 . . . . . 
+        . . . . 8 8 6 6 6 6 8 8 . . . . 
+        . . . . 8 6 9 9 9 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 1 1 9 6 8 . . . . 
+        . . . . 8 6 9 9 9 9 6 8 . . . . 
+        . . . . . 8 6 6 6 6 8 . . . . . 
+        . . . . . . 8 8 8 8 . . . . . . 
+        `, Lava_man_IIV, 0, 60)
+    projectile3.setKind(SpriteKind.Boss_projectile)
+    projectile3.setPosition(0, mySprite.y)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     game.showLongText("Eatin a burger with no honey mustard", DialogLayout.Bottom)
-    info.changeLifeBy(5)
     sprites.destroy(NewBurg)
     Worthiness = 1
+    if (Hard_mode_true == 0) {
+        info.changeLifeBy(5)
+    } else {
+        info.changeLifeBy(1)
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
@@ -1149,81 +1854,193 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenWest, function (s
         tiles.setCurrentTilemap(tilemap`level12`)
         mySprite.setPosition(165, 95)
         Room_ID = 3
-        if (burg == 1) {
-            NewBurg = sprites.create(img`
-                ...........ccccc66666...........
-                ........ccc4444444444666........
-                ......cc444444444bb4444466......
-                .....cb4444bb4444b5b444444b.....
-                ....eb4444b5b44444b44444444b....
-                ...ebb44444b4444444444b444446...
-                ..eb6bb444444444bb444b5b444446..
-                ..e6bb5b44444444b5b444b44bb44e..
-                .e66b4b4444444444b4444444b5b44e.
-                .e6bb444444444444444444444bb44e.
-                eb66b44444bb444444444444444444be
-                eb66bb444b5b44444444bb44444444be
-                fb666b444bb444444444b5b4444444bf
-                fcb666b44444444444444bb444444bcf
-                .fbb6666b44444444444444444444bf.
-                .efbb66666bb4444444444444444bfe.
-                .86fcbb66666bbb44444444444bcc688
-                8772effcbbbbbbbbbbbbbbbbcfc22778
-                87722222cccccccccccccccc22226678
-                f866622222222222222222222276686f
-                fef866677766667777776667777fffef
-                fbff877768f86777777666776fffffbf
-                fbeffeefffeff7766688effeeeefeb6f
-                f6bfffeffeeeeeeeeeeeeefeeeeebb6e
-                f66ddfffffeeeffeffeeeeeffeedb46e
-                .c66ddd4effffffeeeeeffff4ddb46e.
-                .fc6b4dddddddddddddddddddb444ee.
-                ..ff6bb444444444444444444444ee..
-                ....ffbbbb4444444444444444ee....
-                ......ffebbbbbb44444444eee......
-                .........fffffffcccccee.........
-                ................................
-                `, SpriteKind.Food)
-            NewBurg.setPosition(128, 110)
-        }
-        if (burg == 22) {
-            Health_nonstatus = sprites.create(img`
-                ...........ccccc66666...........
-                ........ccc4444444444666........
-                ......cc444444444bb4444466......
-                .....cb4444bb4444b5b444444b.....
-                ....eb4444b5b44444b44444444b....
-                ...ebb44444b4444444444b444446...
-                ..eb6bb444444444bb444b5b444446..
-                ..e6bb5b44444444b5b444b44bb44e..
-                .e66b4b4444444444b4444444b5b44e.
-                .e6bb444444444444444444444bb44e.
-                eb66b44444bb444444444444444444be
-                eb66bb444b5b44444444bb44444444be
-                fb666b444bb444444444b5b4444444bf
-                fcb666b44444444444444bb444444bcf
-                .fbb6666b44444444444444444444bf.
-                .efbb66666bb4444444444444444bfe.
-                .86fcbb66666bbb44444444444bcc688
-                8772effcbbbbbbbbbbbbbbbbcfc22778
-                87722222cccccccccccccccc22226678
-                f866622222222222222222222276686f
-                fef866677766667777776667777fffef
-                fbff877768f86777777666776fffffbf
-                fbeffeefffeff7766688effeeeefeb6f
-                f6bfffeffeeeeeeeeeeeeefeeeeebb6e
-                f66ddfffffeeeffeffeeeeeffeedb46e
-                .c66ddd4effffffeeeeeffff4ddb46e.
-                .fc6b4dddddddddddddddddddb444ee.
-                ..ff6bb444444444444444444444ee..
-                ....ffbbbb4444444444444444ee....
-                ......ffebbbbbb44444444eee......
-                .........fffffffcccccee.........
-                ................................
-                `, SpriteKind.Secret_food)
-            Health_nonstatus.setPosition(128, 110)
+        if (Hard_mode_true == 1) {
+            game.splash("Get ready for a quick time event")
+            textSprite3 = textsprite.create("Left! Up! X! Down! Z! Left!")
+            textSprite3.setPosition(mySprite.x - 20, mySprite.y - 15)
+            timer.after(2750, function () {
+                sprites.destroy(textSprite3)
+                if (Quick_time_event == 1) {
+                    timer.after(500, function () {
+                        NewBurg = sprites.create(img`
+                            ...........ccccc66666...........
+                            ........ccc4444444444666........
+                            ......cc444444444bb4444466......
+                            .....cb4444bb4444b5b444444b.....
+                            ....eb4444b5b44444b44444444b....
+                            ...ebb44444b4444444444b444446...
+                            ..eb6bb444444444bb444b5b444446..
+                            ..e6bb5b44444444b5b444b44bb44e..
+                            .e66b4b4444444444b4444444b5b44e.
+                            .e6bb444444444444444444444bb44e.
+                            eb66b44444bb444444444444444444be
+                            eb66bb444b5b44444444bb44444444be
+                            fb666b444bb444444444b5b4444444bf
+                            fcb666b44444444444444bb444444bcf
+                            .fbb6666b44444444444444444444bf.
+                            .efbb66666bb4444444444444444bfe.
+                            .86fcbb66666bbb44444444444bcc688
+                            8772effcbbbbbbbbbbbbbbbbcfc22778
+                            87722222cccccccccccccccc22226678
+                            f866622222222222222222222276686f
+                            fef866677766667777776667777fffef
+                            fbff877768f86777777666776fffffbf
+                            fbeffeefffeff7766688effeeeefeb6f
+                            f6bfffeffeeeeeeeeeeeeefeeeeebb6e
+                            f66ddfffffeeeffeffeeeeeffeedb46e
+                            .c66ddd4effffffeeeeeffff4ddb46e.
+                            .fc6b4dddddddddddddddddddb444ee.
+                            ..ff6bb444444444444444444444ee..
+                            ....ffbbbb4444444444444444ee....
+                            ......ffebbbbbb44444444eee......
+                            .........fffffffcccccee.........
+                            ................................
+                            `, SpriteKind.Food)
+                        NewBurg.setPosition(128, 110)
+                    })
+                } else {
+                    Health_nonstatus = sprites.create(img`
+                        ...........ccccc66666...........
+                        ........ccc4444444444666........
+                        ......cc444444444bb4444466......
+                        .....cb4444bb4444b5b444444b.....
+                        ....eb4444b5b44444b44444444b....
+                        ...ebb44444b4444444444b444446...
+                        ..eb6bb444444444bb444b5b444446..
+                        ..e6bb5b44444444b5b444b44bb44e..
+                        .e66b4b4444444444b4444444b5b44e.
+                        .e6bb444444444444444444444bb44e.
+                        eb66b44444bb444444444444444444be
+                        eb66bb444b5b44444444bb44444444be
+                        fb666b444bb444444444b5b4444444bf
+                        fcb666b44444444444444bb444444bcf
+                        .fbb6666b44444444444444444444bf.
+                        .efbb66666bb4444444444444444bfe.
+                        .86fcbb66666bbb44444444444bcc688
+                        8772effcbbbbbbbbbbbbbbbbcfc22778
+                        87722222cccccccccccccccc22226678
+                        f866622222222222222222222276686f
+                        fef866677766667777776667777fffef
+                        fbff877768f86777777666776fffffbf
+                        fbeffeefffeff7766688effeeeefeb6f
+                        f6bfffeffeeeeeeeeeeeeefeeeeebb6e
+                        f66ddfffffeeeffeffeeeeeffeedb46e
+                        .c66ddd4effffffeeeeeffff4ddb46e.
+                        .fc6b4dddddddddddddddddddb444ee.
+                        ..ff6bb444444444444444444444ee..
+                        ....ffbbbb4444444444444444ee....
+                        ......ffebbbbbb44444444eee......
+                        .........fffffffcccccee.........
+                        ................................
+                        `, SpriteKind.Quick_time_food)
+                    Health_nonstatus.setPosition(128, 110)
+                    timer.after(500, function () {
+                        Health_nonstatus.setImage(img`
+                            . . . . 2 2 2 2 2 2 2 2 . . . . 
+                            . . . 2 4 4 4 5 5 4 4 4 2 2 2 . 
+                            . 2 2 5 5 d 4 5 5 5 4 4 4 4 2 . 
+                            . 2 4 5 5 5 5 d 5 5 5 4 5 4 2 2 
+                            . 2 4 d d 5 5 5 5 5 5 d 4 4 4 2 
+                            2 4 5 5 d 5 5 5 d d d 5 5 5 4 4 
+                            2 4 5 5 4 4 4 d 5 5 d 5 5 5 4 4 
+                            4 4 4 4 . . 2 4 5 5 . . 4 4 4 4 
+                            . . b b b b 2 4 4 2 b b b b . . 
+                            . b d d d d 2 4 4 2 d d d d b . 
+                            b d d b b b 2 4 4 2 b b b d d b 
+                            b d d b b b b b b b b b b d d b 
+                            b b d 1 1 3 1 1 d 1 d 1 1 d b b 
+                            . . b b d d 1 1 3 d d 1 b b . . 
+                            . . 2 2 4 4 4 4 4 4 4 4 2 2 . . 
+                            . . . 2 2 4 4 4 4 4 2 2 2 . . . 
+                            `)
+                        Health_nonstatus.setScale(7, ScaleAnchor.Middle)
+                        timer.after(500, function () {
+                            game.setGameOverEffect(false, effects.dissolve)
+                            game.gameOver(false)
+                        })
+                    })
+                }
+            })
+        } else {
+            if (burg == 1) {
+                NewBurg = sprites.create(img`
+                    ...........ccccc66666...........
+                    ........ccc4444444444666........
+                    ......cc444444444bb4444466......
+                    .....cb4444bb4444b5b444444b.....
+                    ....eb4444b5b44444b44444444b....
+                    ...ebb44444b4444444444b444446...
+                    ..eb6bb444444444bb444b5b444446..
+                    ..e6bb5b44444444b5b444b44bb44e..
+                    .e66b4b4444444444b4444444b5b44e.
+                    .e6bb444444444444444444444bb44e.
+                    eb66b44444bb444444444444444444be
+                    eb66bb444b5b44444444bb44444444be
+                    fb666b444bb444444444b5b4444444bf
+                    fcb666b44444444444444bb444444bcf
+                    .fbb6666b44444444444444444444bf.
+                    .efbb66666bb4444444444444444bfe.
+                    .86fcbb66666bbb44444444444bcc688
+                    8772effcbbbbbbbbbbbbbbbbcfc22778
+                    87722222cccccccccccccccc22226678
+                    f866622222222222222222222276686f
+                    fef866677766667777776667777fffef
+                    fbff877768f86777777666776fffffbf
+                    fbeffeefffeff7766688effeeeefeb6f
+                    f6bfffeffeeeeeeeeeeeeefeeeeebb6e
+                    f66ddfffffeeeffeffeeeeeffeedb46e
+                    .c66ddd4effffffeeeeeffff4ddb46e.
+                    .fc6b4dddddddddddddddddddb444ee.
+                    ..ff6bb444444444444444444444ee..
+                    ....ffbbbb4444444444444444ee....
+                    ......ffebbbbbb44444444eee......
+                    .........fffffffcccccee.........
+                    ................................
+                    `, SpriteKind.Food)
+                NewBurg.setPosition(128, 110)
+            }
+            if (burg == 22) {
+                Health_nonstatus = sprites.create(img`
+                    ...........ccccc66666...........
+                    ........ccc4444444444666........
+                    ......cc444444444bb4444466......
+                    .....cb4444bb4444b5b444444b.....
+                    ....eb4444b5b44444b44444444b....
+                    ...ebb44444b4444444444b444446...
+                    ..eb6bb444444444bb444b5b444446..
+                    ..e6bb5b44444444b5b444b44bb44e..
+                    .e66b4b4444444444b4444444b5b44e.
+                    .e6bb444444444444444444444bb44e.
+                    eb66b44444bb444444444444444444be
+                    eb66bb444b5b44444444bb44444444be
+                    fb666b444bb444444444b5b4444444bf
+                    fcb666b44444444444444bb444444bcf
+                    .fbb6666b44444444444444444444bf.
+                    .efbb66666bb4444444444444444bfe.
+                    .86fcbb66666bbb44444444444bcc688
+                    8772effcbbbbbbbbbbbbbbbbcfc22778
+                    87722222cccccccccccccccc22226678
+                    f866622222222222222222222276686f
+                    fef866677766667777776667777fffef
+                    fbff877768f86777777666776fffffbf
+                    fbeffeefffeff7766688effeeeefeb6f
+                    f6bfffeffeeeeeeeeeeeeefeeeeebb6e
+                    f66ddfffffeeeffeffeeeeeffeedb46e
+                    .c66ddd4effffffeeeeeffff4ddb46e.
+                    .fc6b4dddddddddddddddddddb444ee.
+                    ..ff6bb444444444444444444444ee..
+                    ....ffbbbb4444444444444444ee....
+                    ......ffebbbbbb44444444eee......
+                    .........fffffffcccccee.........
+                    ................................
+                    `, SpriteKind.Secret_food)
+                Health_nonstatus.setPosition(128, 110)
+            }
         }
     }
+})
+sprites.onDestroyed(SpriteKind.Player, function (sprite) {
+	
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.THing_2, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
@@ -1366,6 +2183,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
             mySprite.y += 15
             game.showLongText("Thou hast not partaken in a a hamburger yet", DialogLayout.Bottom)
             Room_ID = 4
+            Boss_first_fire = 1
         }
     }
 })
@@ -1406,6 +2224,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, 0, -90)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -1425,6 +2246,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, -90, 0)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -1444,6 +2268,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, 0, 90)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -1463,6 +2290,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 . . . . . . . . . . . . . . . . 
                 `, Thing, 90, 0)
             projectile2.setKind(SpriteKind.THing_2)
+            if (Hard_mode_true == 1) {
+                projectile2.follow(mySprite, 15)
+            }
             timer.after(500, function () {
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -1483,6 +2313,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, -90, -90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -1502,6 +2335,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, -90, 90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -1521,6 +2357,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, 90, 90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -1540,25 +2379,31 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                     . . . . . . . . . . . . . . . . 
                     `, Thing, 90, -90)
                 projectile2.setKind(SpriteKind.THing_2)
+                if (Hard_mode_true == 1) {
+                    projectile2.follow(mySprite, 15)
+                }
                 timer.after(1500, function () {
-                    Whowouldhaveguessed = sprites.create(img`
-                        . . . . . . . . . . . . . . . 3 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        . . . . . . . . . . . . . . . . 
-                        `, SpriteKind.Tf2_thing)
+                    timer.after(1500, function () {
+                        Whowouldhaveguessed = sprites.create(img`
+                            . . . . . . . . . . . . . . . 3 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            `, SpriteKind.Tf2_thing)
+                        sprites.destroyAllSpritesOfKind(SpriteKind.THing_2, effects.disintegrate, 500)
+                    })
                 })
             })
         })
@@ -1569,147 +2414,31 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 7), false)
     tiles.setWallAt(tiles.getTileLocation(7, 0), false)
-    tiles.setWallAt(tiles.getTileLocation(7, 15), false)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.baby_killer, function (sprite, otherSprite) {
     sprites.destroy(baby_killer_2, effects.confetti, 2000)
     sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 8), false)
     tiles.setWallAt(tiles.getTileLocation(8, 0), false)
-    tiles.setWallAt(tiles.getTileLocation(8, 15), false)
-})
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairSouth, function (sprite, location) {
-    if (Room_ID == 0) {
-        Item_2 += 1
-        mySprite.setPosition(134, 40)
-        Room_ID = 5
-        tiles.setCurrentTilemap(tilemap`level19`)
-        if (Item_2 == 1) {
-            Thing = sprites.create(img`
-                ..................................bbbbbb........................................
-                .............................bbbbbb.....b.......................................
-                ............................b..........bb.......................................
-                ...........................b.ffffffffff.bb......................................
-                ..........................b.ffffffffffff..b.....................................
-                ..........................b.ffffffffffffff.b....................................
-                ..........................bfffffffffffffff.bb...................................
-                ...........................fffffffffffffffffb...................................
-                ..........................fffffdddddddddffffb...................................
-                ..........................dddddfffddffffdfffb...................................
-                .......................ddddddddddddddddddd..b...................................
-                .......................d4ddddd1661dd1661dd.dddd.................................
-                .......................d4ddddd1661dd1661dd.dddddddd.............................
-                .......................dd4ddddddddfddddddffff4dddddddddd111.....................
-                ........................ddddddddddfdfddddfff44...ddddddd111b111.................
-                .........................ddddddddfddfddddfff44....dddddd11bb111b................
-                ..........................dddddddfffdddddfff44...ddddddd11b111bb11..............
-                ...........................d4d11dddd11fd.........ddddddd11b11bb111b1............
-                ...........................dd4ff1111ffb..2..........dddd1bb11b111bb1d...........
-                .....................22222bddd4dfffff4bb222222.............1bb11bb1dddd.........
-                ..................22222222bdddd44dd44dbb222222222222222......111b1dddddd........
-                ................222222222bddddddd44ddbb2222222222222222ddddd....b1dddddddd......
-                .............222222222222b2ddddddddddb22222222222222222ddddddd....ddddddddd.....
-                ............2222222222222b2222ddddddbb22222222222222222dddddddddd..ddddddddd....
-                ...........222222222222222b222222222b222222222222222222ddddddddddddddddddddd....
-                ............222222222222222b2222222bb222222222222222222ddddddddddddddddddddd....
-                ...........dd222222222222222b222222b2222222222222222222.dddddddddddddddddddd....
-                ...........ddd222222222222222b2222bb222222222222222.......ddddddddddddddddd.....
-                ...........dddd2222222222222bbb33332222222222222222.............ddddddd.........
-                ...........dddddd22222222222bbbb333222222222222222..............................
-                ....e......dddddd2222222222bbbbb33322222222222222...............................
-                ..........ddddddd22222222222bbb33332222222222222................................
-                ..........ddddddd22222222222222233222222222222..................................
-                .........dddddddd22222222222222222222222222222..................................
-                .........ddddddd222222222222222222222222222222..................................
-                ........ddddddd2222222222222222222222222222222..................................
-                ........ddddddd2222222222222222222222222222222..................................
-                .......ddddddd.2222222222222222222222222222222..................................
-                .......dddddd..2222222222222222222222222222222..................................
-                .......dddddd..2222222222222222222222222222222..................................
-                .......ddddd...2222222222222222222222222222222..................................
-                ......dddddd...2222222222222222222222222222222..................................
-                ......dddddd...22222222222222222222222222222222.................................
-                ......dddddd...22222222222222222222222222222222.................................
-                .....ddddddd...22222222222222222222222222222222.................................
-                .....ddddddd..222222222222222222222222222222222.................................
-                .....ddddddd..222222222222222222222222222222222.................................
-                .....ddddddd..222222222222222222222222222222222.................................
-                .....dddddd..2222222222222222222222222222222222.................................
-                .....ddddd....222222222222222222222222222222222.................................
-                .....1111d.....ff22222222222222222222222222222..................................
-                .....bbb11.....fffff22222222222222222222222fff..................................
-                ....1111bbb....eeffffffbbbbbbbbbbbbbffffffffff..................................
-                ....bbb111b....eeeeffffbbbbbbbbbbbbbfffffffeee..................................
-                ....111bbb11...eeeeeeefbbbbbbbbbbbbbfffeeeeeeee.................................
-                ...1b1111dbbb.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.................................
-                ...11bbbbdd...eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee................................
-                ...ddddddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...............................
-                ...dddddddd...eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee..............................
-                ...dddddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.............................
-                ...dddddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.............................
-                .....dddddd..eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee............................
-                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee............................
-                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee............................
-                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...........................
-                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...........................
-                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee...........................
-                ............eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee..........................
-                ............eeeeeeeeeeeeeee.......eeeeeeeeeeeeeeeeeeeee.........................
-                ............eeeeeeeeeeeeeee............eeeeeeeeeeeeeeee.........................
-                ............eeeeeeeeeeeee..............eeeeeeeeeeeeeeeee........................
-                ............eeeeeeeeeeeee..............eeeeeeeeeeeeeeeee........................
-                ............eeeeeeeeeeeee...............eeeeeeeeeeeeeeeee.......................
-                ............eeeeeeeeeeee.................eeeeeeeeeeeeeeee.......................
-                ............eeeeeeeeeeee..................eeeeeeeeeeeeeeee......................
-                ............eeeeeeeeeeee...................eeeeeeeeeeeeeee......................
-                ............eeeeeeeeeeee...................eeeeeeeeeeeeeeee.....................
-                ............eeeeeeeeeeee....................eeeeeeeeeeeeeee.....................
-                ............eeeeeeeeeeee....................eeeeeeeeeeeeeee.....................
-                ...........eeeeeeeeeeeeee...................eeeeeeeeeeeeeee.....................
-                ...........eeeeeeeeeeeee....................eeeeeeeeeeeeeeee....................
-                ...........eeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
-                ...........eeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
-                ..........eeeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
-                ..........eeeeeeeeeeeeee.....................eeeeeeeeeeeeeee....................
-                ..........eeeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeee......................eeeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeee.....................eeeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeee......................eeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
-                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
-                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
-                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeeee...................
-                ............eeeeeeeeeeeeee.....................eeeeeeeeeeeee....................
-                ...........eeeeeeeeeeeeeeeee..................eeeeeeeeeeeeeee...................
-                ...........eeeeeeeeeeeeeeee....................eeeeeeeeeeeee....................
-                ...............1111111111........................1111111111.....................
-                ...............1111111111........................1111111111.....................
-                ...............1111111111........................1111111111.....................
-                ...............1111111111........................1111111111.....................
-                ...............111111111..........................111111111.....................
-                ...............111111111..........................111111111.....................
-                ...............111111111..........................1111111111....................
-                ...............111111111..........................1111111111....................
-                ...............111111111...........................111111111....................
-                ...............111111111...........................111111111....................
-                ...............111111111............................11111111....................
-                ...............111111111............................11111111....................
-                ...............ffff1111f............................11111111....................
-                ..............ffffffffff............................1ffffff1....................
-                ............fff11ffffffff..........................fffffff1ff...................
-                .........fff1fff11fffffff..........................ffffff11f11ffff..............
-                .......fffff11fff1fffffff..........................ffffff1ff1fffff..............
-                ........fffff11ffffffffff..........................ffffffffffffffff.............
-                `, SpriteKind.TACO)
-            Thing.setPosition(134, 140)
-        }
-    }
+    Puzzle_thing = sprites.create(img`
+        . . . b b b b b b b b b . . . . 
+        . . b 1 d d d d d d d 1 b . . . 
+        . b 1 1 1 1 1 1 1 1 1 1 1 b . . 
+        . b d b c c c c c c c b d b . . 
+        . b d c 6 6 6 6 6 6 6 c d b . . 
+        . b d c 6 d 6 6 6 6 6 c d b . . 
+        . b d c 6 6 6 6 6 6 6 c d b . . 
+        . b d c 6 6 6 6 6 6 6 c d b . . 
+        . b d c 6 6 6 6 6 6 6 c d b . . 
+        . b d c c c c c c c c c d b . . 
+        . c b b b b b b b b b b b c . . 
+        c b c c c c c c c c c c c b c . 
+        c 1 d d d d d d d d d d d 1 c . 
+        c 1 d 1 1 d 1 1 d 1 1 d 1 1 c . 
+        c b b b b b b b b b b b b b c . 
+        c c c c c c c c c c c c c c c . 
+        `, SpriteKind.Puter)
+    tiles.placeOnTile(Puzzle_thing, tiles.getTileLocation(7, 13))
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
@@ -1747,10 +2476,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         })
     })
 })
+let Puzzle_thing: Sprite = null
 let Other_placeholder_bossfight: Sprite = null
 let Placeholder_bossfight: Sprite = null
-let Lava_man_IIV: Sprite = null
+let textSprite3: TextSprite = null
 let NewBurg: Sprite = null
+let Lava_man_IIV: Sprite = null
+let projectile3: Sprite = null
+let Quick_time_event = 0
 let Whowouldhaveguessed: Sprite = null
 let projectile2: Sprite = null
 let Theplaceholderreturns: Sprite = null
@@ -1758,6 +2491,9 @@ let Jump_er = 0
 let baby_killer_2: Sprite = null
 let baby_killer: Sprite = null
 let Health_nonstatus: Sprite = null
+let Thingy: Sprite = null
+let boss_fire_true = 0
+let Boss_first_fire = 0
 let Heart_4: Sprite = null
 let Heart_3: Sprite = null
 let Heart_2: Sprite = null
@@ -1765,6 +2501,7 @@ let Heart_1: Sprite = null
 let Scout_lifer = 0
 let Target_room_door_thingy_2 = 0
 let projectile: Sprite = null
+let Puzzle_answer = 0
 let Target_room_door_thingy = 0
 let Target4: Sprite = null
 let Target3: Sprite = null
@@ -1780,16 +2517,22 @@ let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let mySprite: Sprite = null
 let Room_ID = 0
+let Hard_mode_true = 0
 let Target_life = 0
 let Worthiness = 0
 let burg = 0
 let Item_2 = 0
 let Have_scatter = 0
+let puzzle_solved = 0
+let killer_alive = 0
+killer_alive = 0
+puzzle_solved = 0
 Have_scatter = 0
 Item_2 = 0
 burg = 0
 Worthiness = 0
 Target_life = 1
+Hard_mode_true = 0
 Room_ID = 0
 info.setLife(3)
 tiles.setCurrentTilemap(tilemap`level1`)
@@ -1853,14 +2596,61 @@ timer.after(500, function () {
                         . . . . . . . . . . . . . . . . 
                         . . . . . . . . . . . . . . . . 
                         `, SpriteKind.Killer)
+                    killer_alive += 1
                     statusbar = statusbars.create(20, 4, StatusBarKind.Health)
                     statusbar.value = 100
                     statusbar.setLabel("Creature", 15)
                     statusbar.attachToSprite(The_killer)
                     The_killer.setPosition(14, 15)
                     The_killer.follow(mySprite, 35)
+                    timer.after(15000, function () {
+                        controller.combos.detachCombo("UUDDLRLRBA")
+                    })
                 })
             })
         })
     })
+})
+game.onUpdateInterval(500, function () {
+    if (killer_alive == 1) {
+        if (The_killer.vx > 0) {
+            The_killer.setImage(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . f f f f . 
+                . . . . . . . . . . f f . . f f 
+                . . . . . . . . . . f f . f . f 
+                . . . . . . . . . . . f . . f f 
+                . . . . f f f f f f f f f f f . 
+                . . . . f . f . . f . f f f . . 
+                . . f f . f f . . f f . . f . . 
+                . . f . . f . . . . f . . f . . 
+                . f . . f . . . . . f . . . f . 
+                . f . . f . . . . . f f . . . f 
+                . f . . f . . . . . . f . . . f 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `)
+        } else {
+            The_killer.setImage(img`
+                . . . . . . . . . . . . . . . . 
+                . f f f f . . . . . . . . . . . 
+                f f . . f f . . . . . . . . . . 
+                f . f . f f . . . . . . . . . . 
+                f f . . f . . . . . . . . . . . 
+                . f f f f f f f f f f f . . . . 
+                . . f f f . f . . f . f . . . . 
+                . . f . . f f . . f f . f f . . 
+                . . f . . f . . . . f . . f . . 
+                . f . . . f . . . . . f . . f . 
+                f . . . f f . . . . . f . . f . 
+                f . . . f . . . . . . f . . f . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `)
+        }
+    }
 })
