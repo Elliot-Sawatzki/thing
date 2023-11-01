@@ -65,6 +65,26 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (spr
             tiles.setWallAt(tiles.getTileLocation(8, 15), false)
             tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
             tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+        } else {
+            Puzzle_thing = sprites.create(img`
+                . . . b b b b b b b b b . . . . 
+                . . b 1 d d d d d d d 1 b . . . 
+                . b 1 1 1 1 1 1 1 1 1 1 1 b . . 
+                . b d b c c c c c c c b d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 d 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c c c c c c c c c d b . . 
+                . c b b b b b b b b b b b c . . 
+                c b c c c c c c c c c c c b c . 
+                c 1 d d d d d d d d d d d 1 c . 
+                c 1 d 1 1 d 1 1 d 1 1 d 1 1 c . 
+                c b b b b b b b b b b b b b c . 
+                c c c c c c c c c c c c c c c . 
+                `, SpriteKind.Puter)
+            tiles.placeOnTile(Puzzle_thing, tiles.getTileLocation(7, 13))
         }
         if (Item_2 == 0) {
             sprites.destroy(Thing)
@@ -74,6 +94,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairNorth, function (spr
             tiles.setCurrentTilemap(tilemap`level16`)
             Room_ID = 4
             mySprite.setPosition(125, 210)
+            if (Pc_working == 1) {
+                sprites.destroy(Puzzle_thing)
+            }
             if (Target_life == 0) {
                 tiles.setTileAt(tiles.getTileLocation(7, 0), sprites.dungeon.doorOpenNorth)
             } else {
@@ -179,6 +202,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenSouth, function (
         mySprite.setPosition(134, 40)
         Room_ID = 5
         tiles.setCurrentTilemap(tilemap`level19`)
+        if (Pc_working == 1) {
+            sprites.destroy(Puzzle_thing)
+        }
         if (Item_2 == 1) {
             Thing = sprites.create(img`
                 ..................................bbbbbb........................................
@@ -318,6 +344,26 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenSouth, function (
             tiles.setWallAt(tiles.getTileLocation(8, 15), false)
             tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
             tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
+        } else {
+            Puzzle_thing = sprites.create(img`
+                . . . b b b b b b b b b . . . . 
+                . . b 1 d d d d d d d 1 b . . . 
+                . b 1 1 1 1 1 1 1 1 1 1 1 b . . 
+                . b d b c c c c c c c b d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 d 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c c c c c c c c c d b . . 
+                . c b b b b b b b b b b b c . . 
+                c b c c c c c c c c c c c b c . 
+                c 1 d d d d d d d d d d d 1 c . 
+                c 1 d 1 1 d 1 1 d 1 1 d 1 1 c . 
+                c b b b b b b b b b b b b b c . 
+                c c c c c c c c c c c c c c c . 
+                `, SpriteKind.Puter)
+            tiles.placeOnTile(Puzzle_thing, tiles.getTileLocation(7, 13))
         }
         if (Target_room_door_thingy == 0) {
             sprites.destroy(Target1)
@@ -348,6 +394,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Puter, function (sprite, otherSp
                         } else {
                             game.splash("Really?")
                             sprites.destroy(otherSprite, effects.fountain, 500)
+                            Pc_working = 0
                             timer.after(5000, function () {
                                 sprites.destroy(mySprite)
                             })
@@ -361,6 +408,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Puter, function (sprite, otherSp
                     tiles.setWallAt(tiles.getTileLocation(7, 15), false)
                     game.splash("Good job")
                     sprites.destroy(otherSprite, effects.fountain, 500)
+                    Pc_working = 0
                 }
             } else {
                 if (Puzzle_answer == 777777) {
@@ -372,6 +420,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Puter, function (sprite, otherSp
                     game.splash("As I said, stop playing", "this game")
                     game.splash("But fine, go ahead anyway.")
                     sprites.destroy(otherSprite, effects.fountain, 500)
+                    Pc_working = 0
                     tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
                     tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
                     tiles.setWallAt(tiles.getTileLocation(8, 15), false)
@@ -875,6 +924,54 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Killer, function (sprite, otherS
 })
 sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Left_side, function (sprite, otherSprite) {
     sprite.setVelocity(40, 0)
+    sprite.setImage(img`
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        fffffffffffffffffffffffffffffffffffffffffffff
+        `)
+    boss_fire_true = 0
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     Walking_direction = 0
@@ -893,12 +990,35 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (spri
             tiles.setWallAt(tiles.getTileLocation(8, 15), false)
             tiles.setTileAt(tiles.getTileLocation(8, 15), sprites.dungeon.doorOpenSouth)
             tiles.setTileAt(tiles.getTileLocation(7, 15), sprites.dungeon.doorOpenSouth)
+        } else {
+            Puzzle_thing = sprites.create(img`
+                . . . b b b b b b b b b . . . . 
+                . . b 1 d d d d d d d 1 b . . . 
+                . b 1 1 1 1 1 1 1 1 1 1 1 b . . 
+                . b d b c c c c c c c b d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 d 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c 6 6 6 6 6 6 6 c d b . . 
+                . b d c c c c c c c c c d b . . 
+                . c b b b b b b b b b b b c . . 
+                c b c c c c c c c c c c c b c . 
+                c 1 d d d d d d d d d d d 1 c . 
+                c 1 d 1 1 d 1 1 d 1 1 d 1 1 c . 
+                c b b b b b b b b b b b b b c . 
+                c c c c c c c c c c c c c c c . 
+                `, SpriteKind.Puter)
+            tiles.placeOnTile(Puzzle_thing, tiles.getTileLocation(7, 13))
         }
     }
     if (Room_ID == 3) {
         tiles.setCurrentTilemap(tilemap`level2`)
         Room_ID = 1
         mySprite.setPosition(25, 95)
+        if (Pc_working == 1) {
+            sprites.destroy(Puzzle_thing)
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, otherSprite) {
@@ -928,6 +1048,32 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target4, function (sprite, o
             `, SpriteKind.Target4)
         tiles.placeOnTile(Target4, tiles.getTileLocation(4, 4))
     })
+})
+sprites.onDestroyed(SpriteKind.Boss_shooter_working, function (sprite) {
+    if (boss_fire_true >= 1) {
+        timer.after(200, function () {
+            Thingy = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . 4 . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Boss_shooter_working)
+        })
+    } else {
+    	
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target2, function (sprite, otherSprite) {
     sprites.destroy(Target2, effects.disintegrate, 400)
@@ -1386,30 +1532,25 @@ sprites.onOverlap(SpriteKind.Boss_Type_1, SpriteKind.Right_side, function (sprit
         false
         )
         timer.after(1200, function () {
-            if (Boss_first_fire == 1) {
-                boss_fire_true += 1
-                Thingy = sprites.create(img`
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . 4 . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    `, SpriteKind.Boss_shooter_working)
-                Boss_first_fire += 1
-            } else {
-                boss_fire_true += 1
-            }
+            boss_fire_true = 1
+            Thingy = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . 4 . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Boss_shooter_working)
         })
     }
 })
@@ -1508,6 +1649,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairEast, function (spri
         tiles.setCurrentTilemap(tilemap`level2`)
         mySprite.setPosition(230, 95)
         Room_ID = 1
+        if (Pc_working == 1) {
+            sprites.destroy(Puzzle_thing)
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_1, function (sprite, otherSprite) {
@@ -1517,10 +1661,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart_1, function (sprite, other
     }
 })
 controller.combos.attachCombo("UUDDLRLRBA", function () {
-    game.splash("You know what? you don't get more life like in contra, welcome to hard mode ")
-    info.setLife(1)
-    controller.combos.detachCombo("UUDDLRLRBA")
-    Hard_mode_true = 1
+	
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
     if (baby_killer.overlapsWith(baby_killer_2)) {
@@ -1531,12 +1672,14 @@ sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
         baby_killer_2.follow(mySprite, 90)
     }
     timer.after(500, function () {
-        if (baby_killer.overlapsWith(baby_killer_2)) {
-            baby_killer.follow(mySprite, 5)
-            baby_killer_2.follow(mySprite, 10)
-        } else {
-            baby_killer.follow(mySprite, 10)
-            baby_killer_2.follow(mySprite, 10)
+        if (Brotherly_love == 0 && Brotherly_love2 == 0) {
+            if (baby_killer.overlapsWith(baby_killer_2)) {
+                baby_killer.follow(mySprite, 5)
+                baby_killer_2.follow(mySprite, 10)
+            } else {
+                baby_killer.follow(mySprite, 10)
+                baby_killer_2.follow(mySprite, 10)
+            }
         }
         timer.after(500, function () {
             Theplaceholderreturns = sprites.create(img`
@@ -1600,6 +1743,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -1622,6 +1768,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -1644,6 +1793,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -1666,6 +1818,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             timer.after(500, function () {
                 projectile2 = sprites.createProjectileFromSprite(img`
@@ -1689,6 +1844,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -1711,6 +1869,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -1733,6 +1894,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -1755,6 +1919,9 @@ sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 timer.after(1500, function () {
                     sprites.destroy(Whowouldhaveguessed)
@@ -1772,6 +1939,9 @@ controller.combos.attachCombo("LUBDAL", function () {
 info.onLifeZero(function () {
     sprites.destroy(mySprite)
     game.gameOver(false)
+})
+statusbars.onStatusReached(StatusBarKind.Scorhealth, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
+    Hurt_chaser += 1
 })
 sprites.onCreated(SpriteKind.Boss_shooter_working, function (sprite) {
     projectile3 = sprites.createProjectileFromSprite(img`
@@ -1793,7 +1963,8 @@ sprites.onCreated(SpriteKind.Boss_shooter_working, function (sprite) {
         . . . . . . 8 8 8 8 . . . . . . 
         `, Lava_man_IIV, 0, 60)
     projectile3.setKind(SpriteKind.Boss_projectile)
-    projectile3.setPosition(0, mySprite.y)
+    projectile3.setPosition(Lava_man_IIV.x, Lava_man_IIV.y + 15)
+    sprites.destroy(sprite)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     game.showLongText("Eatin a burger with no honey mustard", DialogLayout.Bottom)
@@ -1809,36 +1980,69 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.baby_killer, function (sprite, o
     timer.throttle("Youch", 1500, function () {
         mySprite.x += 10
         info.changeLifeBy(randint(-1, -1))
-        baby_killer_2.setImage(img`
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . f f f . . . . . . 
-            . . . . . . f f f . . . . . . 
-            . . . . . . f f f . . . . . . 
-            . f f f f f f f f f f f f f . 
-            f f . . f . . . . . f . . f f 
-            f . f f f . . . . . f f f . f 
-            f . f . . . . . . . . . f . f 
-            . f f . . . . . . . . . f f . 
-            `)
-        mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
-        timer.after(300, function () {
+        if (Brotherly_love == 1) {
             baby_killer_2.setImage(img`
-                . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . 
-                . . . . . . f f f . . . . 
-                . . . . . . f f f . . . . 
-                . . . . . . f f f . . . . 
-                . . . . f f f f f f . . . 
-                . . . f f f . f . f f . . 
-                . . f f f . . f f . f f . 
-                . . f . f . . . f . . f . 
-                . . f . f . . . f . . f . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . 2 2 2 . . . . . . 
+                . . . . . . 2 2 2 . . . . . . 
+                . . . . . . 2 2 2 . . . . . . 
+                . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+                2 2 . . 2 . . . . . 2 . . 2 2 
+                2 . 2 2 2 . . . . . 2 2 2 . 2 
+                2 . 2 . . . . . . . . . 2 . 2 
+                . 2 2 . . . . . . . . . 2 2 . 
                 `)
-            mySprite.setVelocity(0, 0)
-        })
+            mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
+            timer.after(300, function () {
+                baby_killer_2.setImage(img`
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . 2 2 2 . . . . 
+                    . . . . . . 2 2 2 . . . . 
+                    . . . . . . 2 2 2 . . . . 
+                    . . . . 2 2 2 2 2 2 . . . 
+                    . . . 2 2 2 . 2 . 2 2 . . 
+                    . . 2 2 2 . . 2 2 . 2 2 . 
+                    . . 2 . 2 . . . 2 . . 2 . 
+                    . . 2 . 2 . . . 2 . . 2 . 
+                    `)
+                mySprite.setVelocity(0, 0)
+            })
+        } else {
+            baby_killer_2.setImage(img`
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . f f f . . . . . . 
+                . . . . . . f f f . . . . . . 
+                . . . . . . f f f . . . . . . 
+                . f f f f f f f f f f f f f . 
+                f f . . f . . . . . f . . f f 
+                f . f f f . . . . . f f f . f 
+                f . f . . . . . . . . . f . f 
+                . f f . . . . . . . . . f f . 
+                `)
+            mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
+            timer.after(300, function () {
+                baby_killer_2.setImage(img`
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . f f f . . . . 
+                    . . . . . . f f f . . . . 
+                    . . . . . . f f f . . . . 
+                    . . . . f f f f f f . . . 
+                    . . . f f f . f . f f . . 
+                    . . f f f . . f f . f f . 
+                    . . f . f . . . f . . f . 
+                    . . f . f . . . f . . f . 
+                    `)
+                mySprite.setVelocity(0, 0)
+            })
+        }
     })
 })
 sprites.onCreated(SpriteKind.Jumpy_thing, function (sprite) {
@@ -2039,9 +2243,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenWest, function (s
         }
     }
 })
-sprites.onDestroyed(SpriteKind.Player, function (sprite) {
-	
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.THing_2, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
     sprites.destroy(otherSprite)
@@ -2086,6 +2287,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.TACO, function (sprite, otherSpr
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
     if (Room_ID == 4) {
         if (Worthiness == 0) {
+            boss_fire_true = 0
             tiles.setCurrentTilemap(tilemap`level18`)
             Lava_man_IIV = sprites.create(img`
                 fffffffffffffffffffffffffffffffffffffffffffff
@@ -2178,7 +2380,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, SpriteKind.Right_side)
-            Other_placeholder_bossfight.setPosition(320, 100)
+            Other_placeholder_bossfight.setPosition(300, 100)
         } else {
             mySprite.y += 15
             game.showLongText("Thou hast not partaken in a a hamburger yet", DialogLayout.Bottom)
@@ -2226,6 +2428,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -2248,6 +2453,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -2270,6 +2478,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -2292,6 +2503,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
             projectile2.setKind(SpriteKind.THing_2)
             if (Hard_mode_true == 1) {
                 projectile2.follow(mySprite, 15)
+                if (Hurt_chaser >= 1) {
+                    projectile2.follow(mySprite, 30)
+                }
             }
             timer.after(500, function () {
                 projectile2 = sprites.createProjectileFromSprite(img`
@@ -2315,6 +2529,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -2337,6 +2554,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -2359,6 +2579,9 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 projectile2 = sprites.createProjectileFromSprite(img`
                     . . . . . . . . . . . . . . . . 
@@ -2381,42 +2604,59 @@ sprites.onDestroyed(SpriteKind.Tf2_thing, function (sprite) {
                 projectile2.setKind(SpriteKind.THing_2)
                 if (Hard_mode_true == 1) {
                     projectile2.follow(mySprite, 15)
+                    if (Hurt_chaser >= 1) {
+                        projectile2.follow(mySprite, 30)
+                    }
                 }
                 timer.after(1500, function () {
-                    timer.after(1500, function () {
-                        Whowouldhaveguessed = sprites.create(img`
-                            . . . . . . . . . . . . . . . 3 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            `, SpriteKind.Tf2_thing)
-                        sprites.destroyAllSpritesOfKind(SpriteKind.THing_2, effects.disintegrate, 500)
-                    })
+                    Whowouldhaveguessed = sprites.create(img`
+                        . . . . . . . . . . . . . . . 3 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        `, SpriteKind.Tf2_thing)
+                    sprites.destroyAllSpritesOfKind(SpriteKind.THing_2, effects.disintegrate, 500)
                 })
             })
         })
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    sprites.destroy(baby_killer, effects.confetti, 2000)
+    sprites.destroy(baby_killer, effects.confetti, 500)
     sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 7), false)
     tiles.setWallAt(tiles.getTileLocation(7, 0), false)
+    if (Hard_mode_true == 1) {
+        baby_killer_2.setImage(img`
+            . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . 
+            . . . . . . 2 2 2 . . . . 
+            . . . . . . 2 2 2 . . . . 
+            . . . . . . 2 2 2 . . . . 
+            . . . . 2 2 2 2 2 2 . . . 
+            . . . 2 2 2 . 2 . 2 2 . . 
+            . . 2 2 2 . . 2 2 . 2 2 . 
+            . . 2 . 2 . . . 2 . . 2 . 
+            . . 2 . 2 . . . 2 . . 2 . 
+            `)
+        Brotherly_love += 1
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.baby_killer, function (sprite, otherSprite) {
-    sprites.destroy(baby_killer_2, effects.confetti, 2000)
+    sprites.destroy(baby_killer_2, effects.confetti, 500)
     sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 8), false)
     tiles.setWallAt(tiles.getTileLocation(8, 0), false)
@@ -2439,44 +2679,93 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.baby_killer, function (sprit
         c c c c c c c c c c c c c c c . 
         `, SpriteKind.Puter)
     tiles.placeOnTile(Puzzle_thing, tiles.getTileLocation(7, 13))
+    if (Hard_mode_true == 1) {
+        Brotherly_love2 += 1
+        baby_killer.setImage(img`
+            . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . 
+            . . . . . . 2 2 2 . . . . 
+            . . . . . . 2 2 2 . . . . 
+            . . . . . . 2 2 2 . . . . 
+            . . . . 2 2 2 2 2 2 . . . 
+            . . . 2 2 2 . 2 . 2 2 . . 
+            . . 2 2 2 . . 2 2 . 2 2 . 
+            . . 2 . 2 . . . 2 . . 2 . 
+            . . 2 . 2 . . . 2 . . 2 . 
+            `)
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     timer.throttle("Youch", 1500, function () {
         baby_killer_2.x += 10
         info.changeLifeBy(randint(-1, -1))
-        baby_killer.setImage(img`
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . f f f . . . . . . 
-            . . . . . . f f f . . . . . . 
-            . . . . . . f f f . . . . . . 
-            . f f f f f f f f f f f f f . 
-            f f . . f . . . . . f . . f f 
-            f . f f f . . . . . f f f . f 
-            f . f . . . . . . . . . f . f 
-            . f f . . . . . . . . . f f . 
-            `)
-        mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
-        timer.after(300, function () {
-            mySprite.setVelocity(0, 0)
+        if (Brotherly_love2 == 1) {
             baby_killer.setImage(img`
-                . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . 
-                . . . . . . f f f . . . . 
-                . . . . . . f f f . . . . 
-                . . . . . . f f f . . . . 
-                . . . . f f f f f f . . . 
-                . . . f f f . f . f f . . 
-                . . f f f . . f f . f f . 
-                . . f . f . . . f . . f . 
-                . . f . f . . . f . . f . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . 2 2 2 . . . . . . 
+                . . . . . . 2 2 2 . . . . . . 
+                . . . . . . 2 2 2 . . . . . . 
+                . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+                2 2 . . 2 . . . . . 2 . . 2 2 
+                2 . 2 2 2 . . . . . 2 2 2 . 2 
+                2 . 2 . . . . . . . . . 2 . 2 
+                . 2 2 . . . . . . . . . 2 2 . 
                 `)
-        })
+            mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
+            timer.after(300, function () {
+                baby_killer.setImage(img`
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . 2 2 2 . . . . 
+                    . . . . . . 2 2 2 . . . . 
+                    . . . . . . 2 2 2 . . . . 
+                    . . . . 2 2 2 2 2 2 . . . 
+                    . . . 2 2 2 . 2 . 2 2 . . 
+                    . . 2 2 2 . . 2 2 . 2 2 . 
+                    . . 2 . 2 . . . 2 . . 2 . 
+                    . . 2 . 2 . . . 2 . . 2 . 
+                    `)
+                mySprite.setVelocity(0, 0)
+            })
+        } else {
+            baby_killer.setImage(img`
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . 
+                . . . . . . f f f . . . . . . 
+                . . . . . . f f f . . . . . . 
+                . . . . . . f f f . . . . . . 
+                . f f f f f f f f f f f f f . 
+                f f . . f . . . . . f . . f f 
+                f . f f f . . . . . f f f . f 
+                f . f . . . . . . . . . f . f 
+                . f f . . . . . . . . . f f . 
+                `)
+            mySprite.setVelocity(baby_killer_2.vx * 2, baby_killer_2.vy * 2)
+            timer.after(300, function () {
+                baby_killer.setImage(img`
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . 
+                    . . . . . . f f f . . . . 
+                    . . . . . . f f f . . . . 
+                    . . . . . . f f f . . . . 
+                    . . . . f f f f f f . . . 
+                    . . . f f f . f . f f . . 
+                    . . f f f . . f f . f f . 
+                    . . f . f . . . f . . f . 
+                    . . f . f . . . f . . f . 
+                    `)
+                mySprite.setVelocity(0, 0)
+            })
+        }
     })
 })
-let Puzzle_thing: Sprite = null
+let Boss_first_fire = 0
 let Other_placeholder_bossfight: Sprite = null
 let Placeholder_bossfight: Sprite = null
 let textSprite3: TextSprite = null
@@ -2485,7 +2774,10 @@ let Lava_man_IIV: Sprite = null
 let projectile3: Sprite = null
 let Quick_time_event = 0
 let Whowouldhaveguessed: Sprite = null
+let Hurt_chaser = 0
 let projectile2: Sprite = null
+let Brotherly_love2 = 0
+let Brotherly_love = 0
 let Theplaceholderreturns: Sprite = null
 let Jump_er = 0
 let baby_killer_2: Sprite = null
@@ -2493,7 +2785,6 @@ let baby_killer: Sprite = null
 let Health_nonstatus: Sprite = null
 let Thingy: Sprite = null
 let boss_fire_true = 0
-let Boss_first_fire = 0
 let Heart_4: Sprite = null
 let Heart_3: Sprite = null
 let Heart_2: Sprite = null
@@ -2508,9 +2799,11 @@ let Target3: Sprite = null
 let Target2: Sprite = null
 let Target1: Sprite = null
 let Thing: Sprite = null
+let Puzzle_thing: Sprite = null
 let Walking_direction = 0
 let Scot_tf2_heatl: StatusBarSprite = null
 let Scatteredgug: Sprite = null
+let Hardmode_ask = ""
 let statusbar: StatusBarSprite = null
 let The_killer: Sprite = null
 let textSprite2: TextSprite = null
@@ -2525,6 +2818,8 @@ let Item_2 = 0
 let Have_scatter = 0
 let puzzle_solved = 0
 let killer_alive = 0
+let Pc_working = 0
+Pc_working = 1
 killer_alive = 0
 puzzle_solved = 0
 Have_scatter = 0
@@ -2603,9 +2898,14 @@ timer.after(500, function () {
                     statusbar.attachToSprite(The_killer)
                     The_killer.setPosition(14, 15)
                     The_killer.follow(mySprite, 35)
-                    timer.after(15000, function () {
-                        controller.combos.detachCombo("UUDDLRLRBA")
-                    })
+                    Hardmode_ask = game.askForString("Hardmode? Y/N")
+                    if (Hardmode_ask == "y" || Hardmode_ask == "yes") {
+                        info.setLife(1)
+                        Hard_mode_true = 1
+                        game.splash("Have fun")
+                    } else {
+                        game.splash("Ok")
+                    }
                 })
             })
         })
