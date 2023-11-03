@@ -30,6 +30,7 @@ namespace SpriteKind {
     export const Boss_projectile = SpriteKind.create()
     export const Puter = SpriteKind.create()
     export const Quick_time_food = SpriteKind.create()
+    export const Undead_killer = SpriteKind.create()
 }
 namespace StatusBarKind {
     export const Scorhealth = StatusBarKind.create()
@@ -588,7 +589,11 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killer, function (sprite, otherSprite) {
     sprites.destroy(sprite)
-    statusbar.value += -50
+    if (Hard_mode_true == 1) {
+        statusbar.value += -25
+    } else {
+        statusbar.value += -50
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Target1, function (sprite, otherSprite) {
     sprites.destroy(Target1, effects.disintegrate, 400)
@@ -1664,45 +1669,81 @@ controller.combos.attachCombo("UUDDLRLRBA", function () {
 	
 })
 sprites.onDestroyed(SpriteKind.Jumpy_thing, function (sprite) {
-    if (baby_killer.overlapsWith(baby_killer_2)) {
-        baby_killer_2.follow(mySprite, 85)
-        baby_killer.follow(mySprite, 90)
+    if (Glitcher_1 == 1) {
+        Glitcher.follow(mySprite, 0)
+        if (Math.percentChance(25)) {
+            Glitcher.setPosition(mySprite.x + 40, mySprite.y)
+        } else if (Math.percentChance(25)) {
+            Glitcher.setPosition(mySprite.x + -40, mySprite.y + 0)
+        } else if (Math.percentChance(25)) {
+            Glitcher.setPosition(mySprite.x + 0, mySprite.y + 40)
+        } else {
+            Glitcher.setPosition(mySprite.x + 0, mySprite.y + -40)
+        }
+        timer.after(600, function () {
+            Glitcher.follow(mySprite, 80)
+            timer.after(500, function () {
+                Theplaceholderreturns = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 3 
+                    `, SpriteKind.Jumpy_thing)
+            })
+        })
     } else {
-        baby_killer.follow(mySprite, 90)
-        baby_killer_2.follow(mySprite, 90)
-    }
-    timer.after(500, function () {
-        if (Brotherly_love == 0 && Brotherly_love2 == 0) {
-            if (baby_killer.overlapsWith(baby_killer_2)) {
-                baby_killer.follow(mySprite, 5)
-                baby_killer_2.follow(mySprite, 10)
-            } else {
-                baby_killer.follow(mySprite, 10)
-                baby_killer_2.follow(mySprite, 10)
-            }
+        if (baby_killer.overlapsWith(baby_killer_2)) {
+            baby_killer_2.follow(mySprite, 85)
+            baby_killer.follow(mySprite, 90)
+        } else {
+            baby_killer.follow(mySprite, 90)
+            baby_killer_2.follow(mySprite, 90)
         }
         timer.after(500, function () {
-            Theplaceholderreturns = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . 3 
-                `, SpriteKind.Jumpy_thing)
-            Theplaceholderreturns.setPosition(1000, 1000)
+            if (Brotherly_love == 0 && Brotherly_love2 == 0) {
+                if (baby_killer.overlapsWith(baby_killer_2)) {
+                    baby_killer.follow(mySprite, 5)
+                    baby_killer_2.follow(mySprite, 10)
+                } else {
+                    baby_killer.follow(mySprite, 10)
+                    baby_killer_2.follow(mySprite, 10)
+                }
+            }
+            timer.after(500, function () {
+                Theplaceholderreturns = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 3 
+                    `, SpriteKind.Jumpy_thing)
+                Theplaceholderreturns.setPosition(1000, 1000)
+            })
         })
-    })
+    }
 })
 sprites.onCreated(SpriteKind.Tf2_thing, function (sprite) {
     if (Math.percentChance(20)) {
@@ -2656,6 +2697,22 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.baby_killer, function (sprite, otherSprite) {
+    if (Brotherly_love == 1) {
+        Glitcher_1 += 1
+        Glitcher = sprites.create(img`
+            . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . 
+            . . . . . . a 2 4 . . . . 
+            . . . . . . f 4 7 . . . . 
+            . . . . . . f d a . . . . 
+            . . . . 9 3 8 a e 7 . . . 
+            . . . 9 8 9 . 5 . 8 b . . 
+            . . b 5 2 . . 7 3 . e 3 . 
+            . . 3 . 5 . . . 8 . . f . 
+            . . e . b . . . f . . d . 
+            `, SpriteKind.Undead_killer)
+    }
     sprites.destroy(baby_killer_2, effects.confetti, 500)
     sprites.destroy(sprite)
     tiles.setWallAt(tiles.getTileLocation(0, 8), false)
@@ -2778,6 +2835,7 @@ let Hurt_chaser = 0
 let projectile2: Sprite = null
 let Brotherly_love2 = 0
 let Brotherly_love = 0
+let Glitcher: Sprite = null
 let Theplaceholderreturns: Sprite = null
 let Jump_er = 0
 let baby_killer_2: Sprite = null
@@ -2803,7 +2861,6 @@ let Puzzle_thing: Sprite = null
 let Walking_direction = 0
 let Scot_tf2_heatl: StatusBarSprite = null
 let Scatteredgug: Sprite = null
-let Hardmode_ask = ""
 let statusbar: StatusBarSprite = null
 let The_killer: Sprite = null
 let textSprite2: TextSprite = null
@@ -2819,6 +2876,8 @@ let Have_scatter = 0
 let puzzle_solved = 0
 let killer_alive = 0
 let Pc_working = 0
+let Glitcher_1 = 0
+Glitcher_1 = 0
 Pc_working = 1
 killer_alive = 0
 puzzle_solved = 0
@@ -2830,6 +2889,17 @@ Target_life = 1
 Hard_mode_true = 0
 Room_ID = 0
 info.setLife(3)
+let Hardmode_ask = game.askForString("Enter: H = Hard mode, N = Normal, E = easy.")
+if (Hardmode_ask == "h" || Hardmode_ask == "H") {
+    info.setLife(100)
+    Hard_mode_true = 1
+    game.splash("Have fun")
+} else if (Hardmode_ask == "E" || Hardmode_ask == "e") {
+    game.splash("Easy mode, how lame")
+    info.setLife(25)
+} else {
+	
+}
 tiles.setCurrentTilemap(tilemap`level1`)
 mySprite = sprites.create(img`
     ....................
@@ -2898,14 +2968,6 @@ timer.after(500, function () {
                     statusbar.attachToSprite(The_killer)
                     The_killer.setPosition(14, 15)
                     The_killer.follow(mySprite, 35)
-                    Hardmode_ask = game.askForString("Hardmode? Y/N")
-                    if (Hardmode_ask == "y" || Hardmode_ask == "yes") {
-                        info.setLife(1)
-                        Hard_mode_true = 1
-                        game.splash("Have fun")
-                    } else {
-                        game.splash("Ok")
-                    }
                 })
             })
         })
