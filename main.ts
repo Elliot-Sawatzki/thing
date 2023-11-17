@@ -6384,7 +6384,7 @@ Hearts_there = 0
 info.setLife(3)
 let Hardmode_ask = game.askForString("Enter: H = Hard mode, N = Normal, E = easy.", 1)
 if (Hardmode_ask == "h" || Hardmode_ask == "H") {
-    info.setLife(11)
+    info.setLife(2)
     Hard_mode_true = 1
     game.splash("Have fun")
 } else if (Hardmode_ask == "E" || Hardmode_ask == "e") {
