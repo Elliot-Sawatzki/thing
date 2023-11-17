@@ -1035,6 +1035,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killer, function (sprite, ot
 })
 statusbars.onStatusReached(StatusBarKind.Boss_health, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 10, function (status) {
     sprites.destroy(statusbar2)
+    boss_fire_true = 0
     Lava_man_IIV.setImage(img`
         222222222222222222222222222222222222222222222
         222222222222222222222222222222222222222222222
@@ -6319,7 +6320,6 @@ let baby_killer2: Sprite = null
 let Health_nonstatus: Sprite = null
 let Thingy: Sprite = null
 let Small_cube: Sprite = null
-let boss_fire_true = 0
 let Scout_lifer = 0
 let list: Sprite[] = []
 let Heart_42: Sprite = null
@@ -6328,6 +6328,7 @@ let Heart_22: Sprite = null
 let Heart_12: Sprite = null
 let Target_room_door_thingy_2 = 0
 let Bottom_slam: Sprite = null
+let boss_fire_true = 0
 let statusbar2: StatusBarSprite = null
 let projectile: Sprite = null
 let mySprite20231116T143530078Z: Sprite = null
